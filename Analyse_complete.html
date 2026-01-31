@@ -1406,7 +1406,7 @@
                 <!-- Export Options Cards -->
                 <div class="export-options">
                     <!-- PDF Export -->
-<div class="export-card pdf" onclick="openOnlineReport()">
+<div class="export-card pdf" onclick="smartExportPDF()">
                         <div class="export-icon pdf">
                             <i class="fas fa-file-pdf"></i>
                         </div>
@@ -3546,12 +3546,21 @@
             }
         });
         
-function openOnlineReport(){
-   window.open(
-     "https://wahidnabil2018-spe.github.io/report/Analyse_complete.html",
-     "_blank"
-   );
+function smartExportPDF(){
+
+   // لو الصفحة مفتوحة من GitHub Pages
+   if (location.hostname.includes("github.io")) {
+       exportToPDF();
+   } else {
+       // لو داخل التطبيق
+       window.open(
+         "https://wahidnabil2018-spe.github.io/report/Analyse_complete.html",
+         "_blank"
+       );
+   }
+
 }
+
 
 
         
