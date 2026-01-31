@@ -1,0 +1,3560 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدرسة الدكتور أحمد زويل الثانوية بنات Zoweil365</title>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- HTML2PDF for PDF export -->
+    
+    <!-- html2canvas for capturing HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- jsPDF for better PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- Arabic Font Support for jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-arabic@1.0.1/dist/jspdf.plugin.arabic.min.js"></script>
+    
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    
+    <!-- FileSaver for saving files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #1f2937;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+        
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+            direction: rtl;
+            overflow-x: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button {
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: #60a5fa;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+        }
+        
+        /* Navigation */
+        .nav-container {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 80px;
+            z-index: 999;
+        }
+        
+        .nav-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .nav {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .nav-btn {
+            padding: 1rem 1.25rem;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .nav-btn:hover {
+            color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .nav-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.08);
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Dashboard Stats */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+        
+        .stat-icon.total { background-color: rgba(37, 99, 235, 0.1); color: var(--primary); }
+        .stat-icon.pass { background-color: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-icon.fail { background-color: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .stat-icon.rate { background-color: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        
+        .stat-info h3 {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        /* Filters Section */
+        .filters-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .filters-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+        
+        .filter-input, .filter-select {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: white;
+        }
+        
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        /* Tables */
+        .table-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        
+        .table-title {
+            padding: 1.25rem 1.5rem;
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 1.1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        
+        .data-table th {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem 1.25rem;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .data-table td {
+            padding: 0.9rem 1.25rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        
+        /* Teacher Panel */
+        .teacher-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .action-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .action-title {
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #0da271;
+        }
+        
+        /* Reports Section - Updated */
+        .reports-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+        }
+        
+        .reports-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .reports-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .reports-desc {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+        
+        /* Export Options */
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .export-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            border: 2px solid transparent;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .export-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .export-card.pdf:hover {
+            border-color: #ef4444;
+        }
+        
+        .export-card.excel:hover {
+            border-color: #217346;
+        }
+        
+        .export-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .export-icon.pdf {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+        
+        .export-icon.excel {
+            background-color: rgba(33, 115, 70, 0.1);
+            color: #217346;
+        }
+        
+        .export-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .export-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .export-features {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .export-features span {
+            background-color: var(--gray-light);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .export-features i {
+            color: var(--success);
+        }
+        
+        /* Advanced Options */
+        .advanced-options {
+            background-color: #f8fafc;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: right;
+        }
+        
+        .advanced-options h4 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        /* Export Preview */
+        .export-preview {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--box-shadow);
+            display: none;
+        }
+        
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .preview-title {
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+        
+        .preview-content {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: #fdfdfd;
+        }
+        
+        /* Slice Tables */
+        .slices-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .slice-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+        
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .stats-cards {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+            
+            .filters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .export-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+                position: absolute;
+                left: 1.5rem;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            
+            .nav-container {
+                position: relative;
+                top: 0;
+                display: none;
+            }
+            
+            .nav-container.active {
+                display: block;
+            }
+            
+            .nav {
+                flex-direction: column;
+                overflow-x: visible;
+            }
+            
+            .nav-btn {
+                border-bottom: none;
+                border-right: 3px solid transparent;
+                justify-content: flex-start;
+            }
+            
+            .nav-btn.active {
+                border-right-color: var(--primary);
+                border-bottom: none;
+            }
+            
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .teacher-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .slices-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-wrapper {
+                height: 300px;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+            
+            .export-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-card {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .stat-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
+            .export-features {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+        
+        .loading-spinner {
+            border: 3px solid rgba(37, 99, 235, 0.1);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--gray);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--gray-light);
+            margin-top: 2rem;
+        }
+        
+        /* Special styles for subject cells */
+        .not-applicable {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            font-style: italic;
+        }
+        
+        /* Additional info row in slices tables */
+        .info-row {
+            background-color: #f8fafc;
+            font-weight: bold;
+        }
+        
+        /* Tab buttons */
+        .tab-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gray-light);
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+        
+        /* Slice table responsive */
+        .slice-table-wrapper {
+            overflow-x: auto;
+            padding: 0.5rem;
+        }
+        
+        .slice-table {
+            width: 100%;
+            min-width: 300px;
+            border-collapse: collapse;
+        }
+        
+        .slice-table th {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .slice-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        /* Hidden subjects list */
+        .hidden-subjects-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .hidden-subject-tag {
+            background-color: var(--gray-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Special styling for grade 1 section */
+        .grade1-section {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .grade1-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .grade1-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        /* Export Loading */
+        .export-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .export-loading-content {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            color: var(--dark);
+            max-width: 400px;
+        }
+        
+        .export-loading-spinner {
+            border: 4px solid rgba(37, 99, 235, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="mobile-menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div>
+                    <div class="logo-text">مدرسة الدكتور أحمد زويل الثانوية بنات</div>
+                    <div class="logo-subtitle">نظام تحليل النتائج المدرسية Zoweil365 - جميع الصفوف</div>
+                </div>
+            </div>
+            <div class="header-info">
+                <div style="font-size: 0.9rem; opacity: 0.9;">
+                    <i class="fas fa-database" style="margin-left: 0.5rem;"></i>
+                    بيانات شاملة لجميع الصفوف
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <div class="nav-container" id="navContainer">
+        <div class="nav-wrapper">
+            <nav class="nav">
+                <button class="nav-btn active" onclick="showSection('dash')">
+                    <i class="fas fa-home"></i>
+                    الرئيسية
+                </button>
+                <button class="nav-btn" onclick="showSection('subjects')">
+                    <i class="fas fa-book-open"></i>
+                    تحليل المواد
+                </button>
+                <button class="nav-btn" onclick="showSection('slices')">
+                    <i class="fas fa-chart-pie"></i>
+                    شرائح الدرجات
+                </button>
+                <button class="nav-btn" onclick="showSection('top')">
+                    <i class="fas fa-trophy"></i>
+                    الأوائل
+                </button>
+<button class="nav-btn" onclick="showSection('grade1-section')" style="display:none;">
+    <i class="fas fa-user-graduate"></i>
+    الصف الأول
+</button>
+
+                </button>
+                <button class="nav-btn" onclick="showSection('teacher')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    لوحة المدرس
+                </button>
+                <button class="nav-btn" onclick="showSection('reports')">
+                    <i class="fas fa-file-export"></i>
+                    التصدير
+                </button>
+            </nav>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Dashboard Section -->
+        <section id="dash" class="section active">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchSheet('science')">
+                    <i class="fas fa-flask"></i>
+                    الصف الثاني علمي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('literary')">
+                    <i class="fas fa-book"></i>
+                    الصف الثاني أدبي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('grade1')">
+                    <i class="fas fa-user-graduate"></i>
+                    الصف الأول
+                </button>
+            </div>
+            
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>عدد الطلاب</h3>
+                        <div class="stat-value" id="totalCount">0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon pass">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>ناجح</h3>
+                        <div class="stat-value" id="passCount">0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon fail">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>راسب</h3>
+                        <div class="stat-value" id="failCount">0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon rate">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>نسبة النجاح</h3>
+                        <div class="stat-value" id="successRate">0%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filters-section">
+                <div class="filters-title">
+                    <i class="fas fa-filter"></i>
+                    فلاتر البحث والتصفية
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">بحث بالاسم أو رقم الجلوس</label>
+                        <input type="text" id="search" class="filter-input" placeholder="اكتب للبحث...">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">الفصل</label>
+                        <select id="classFilter" class="filter-select">
+                            <option value="">كل الفصول</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-title">
+                    <i class="fas fa-table"></i>
+                    بيانات الطلاب - <span id="currentSheetTitle">الصف الثاني علمي</span>
+                </div>
+                <div class="loading" id="tableLoading">
+                    <div class="loading-spinner"></div>
+                    جاري تحميل البيانات...
+                </div>
+                <table class="data-table" id="mainTable"></table>
+            </div>
+        </section>
+        
+        <!-- Subjects Analysis Section -->
+        <section id="subjects" class="section">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchSheet('science')">
+                    <i class="fas fa-flask"></i>
+                    الصف الثاني علمي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('literary')">
+                    <i class="fas fa-book"></i>
+                    الصف الثاني أدبي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('grade1')">
+                    <i class="fas fa-user-graduate"></i>
+                    الصف الأول
+                </button>
+            </div>
+            
+            <div class="filters-section">
+                <div class="filters-title">
+                    <i class="fas fa-book"></i>
+                    اختيار المادة للتحليل
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">المادة</label>
+                        <select id="subjectSelect" class="filter-select"></select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="table-title">
+                    <i class="fas fa-chart-bar"></i>
+                    توزيع درجات المادة - <span id="chartSheetTitle">الصف الثاني علمي</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Slices Section -->
+        <section id="slices" class="section">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchSheet('science')">
+                    <i class="fas fa-flask"></i>
+                    الصف الثاني علمي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('literary')">
+                    <i class="fas fa-book"></i>
+                    الصف الثاني أدبي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('grade1')">
+                    <i class="fas fa-user-graduate"></i>
+                    الصف الأول
+                </button>
+            </div>
+            
+            <div class="filters-section">
+                <div class="filters-title">
+                    <i class="fas fa-chart-pie"></i>
+                    اختيار المادة لعرض الشرائح
+                </div>
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">المادة</label>
+<select id="sliceSubject" class="filter-select"
+        onchange="generateGradeSlices(this.value)">
+</select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slices-container">
+                <div class="slice-card">
+                    <div class="table-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        شرائح الاختبار
+                    </div>
+                    <div class="slice-table-wrapper">
+                        <table class="slice-table" id="testSlice"></table>
+                    </div>
+                </div>
+                
+                <div class="slice-card">
+                    <div class="table-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        شرائح المجموع
+                    </div>
+                    <div class="slice-table-wrapper">
+                        <table class="slice-table" id="totalSlice"></table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Top Students Section -->
+        <section id="top" class="section">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchSheet('science')">
+                    <i class="fas fa-flask"></i>
+                    الصف الثاني علمي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('literary')">
+                    <i class="fas fa-book"></i>
+                    الصف الثاني أدبي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('grade1')">
+                    <i class="fas fa-user-graduate"></i>
+                    الصف الأول
+                </button>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-title">
+                    <i class="fas fa-trophy"></i>
+                    قائمة الأوائل - <span id="topSheetTitle">الصف الثاني علمي</span>
+                </div>
+                <table class="data-table" id="topTable"></table>
+            </div>
+        </section>
+        
+        <!-- Grade 1 Section -->
+        <section id="grade1-section" class="section">
+            <div class="grade1-section">
+                <div class="grade1-content">
+                    <h1 style="color: var(--primary); margin-bottom: 1.5rem;">
+                        <i class="fas fa-user-graduate"></i>
+                        نظام الصف الأول الثانوي
+                    </h1>
+                    <p style="color: var(--gray); margin-bottom: 2rem; font-size: 1.1rem;">
+                        يمكنك استخدام نظام تحليل النتائج للصف الأول الثانوي بنفس مزايا النظام للصف الثاني.
+                    </p>
+                    
+                    <div class="filters-section" style="max-width: 600px; margin: 2rem auto;">
+                        <div class="filters-title">
+                            <i class="fas fa-cogs"></i>
+                            إعدادات الصف الأول الثانوي
+                        </div>
+                        <div class="filters-grid">
+                            <div class="filter-group">
+                                <label class="filter-label">درجة النجاح للصف الأول</label>
+                                <div class="form-row">
+                                    <input type="number" id="grade1PassMark" class="filter-input" value="300" min="0" max="600">
+                                    <button class="btn btn-primary" onclick="setGrade1PassMark()">
+                                        <i class="fas fa-check"></i>
+                                        تعيين
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grade1-actions">
+                        <button class="btn btn-primary" onclick="showSection('dash')">
+                            <i class="fas fa-table"></i>
+                            عرض بيانات الصف الأول
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchSheet('grade1'); showSection('subjects')">
+                            <i class="fas fa-chart-bar"></i>
+                            تحليل المواد
+                        </button>
+                        <button class="btn btn-success" onclick="switchSheet('grade1'); showSection('top')">
+                            <i class="fas fa-trophy"></i>
+                            الأوائل
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 2rem; color: var(--gray); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i>
+                        ملاحظة: الصف الأول له نظام تقييم مختلف عن الصف الثاني
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Teacher Panel Section -->
+        <section id="teacher" class="section">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchSheet('science')">
+                    <i class="fas fa-flask"></i>
+                    الصف الثاني علمي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('literary')">
+                    <i class="fas fa-book"></i>
+                    الصف الثاني أدبي
+                </button>
+                <button class="tab-btn" onclick="switchSheet('grade1')">
+                    <i class="fas fa-user-graduate"></i>
+                    الصف الأول
+                </button>
+            </div>
+            
+            <div class="teacher-actions">
+                <div class="action-card">
+                    <div class="action-title">
+                        <i class="fas fa-check-double"></i>
+                        تحديد درجة النجاح
+                    </div>
+                    <div class="action-form">
+                        <div class="form-group">
+                            <label class="filter-label">درجة النجاح الحالية: <span id="currentPassMark">190</span></label>
+                            <div class="form-row">
+                                <input type="number" id="passMark" class="filter-input" value="190" min="0" max="700">
+                                <button class="btn btn-primary" onclick="applyPassMark()">
+                                    <i class="fas fa-check"></i>
+                                    تطبيق
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-card">
+                    <div class="action-title">
+                        <i class="fas fa-eye-slash"></i>
+                        إخفاء/إظهار المواد
+                    </div>
+                    <div class="action-form">
+                        <div class="form-group">
+                            <label class="filter-label">اختر المادة</label>
+                            <div class="form-row">
+                                <select id="subjectAction" class="filter-select"></select>
+                                <button class="btn btn-secondary" onclick="toggleSubject('hide')" style="flex: 1;">
+                                    <i class="fas fa-eye-slash"></i>
+                                    إخفاء
+                                </button>
+                                <button class="btn btn-success" onclick="toggleSubject('show')" style="flex: 1;">
+                                    <i class="fas fa-eye"></i>
+                                    إظهار
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden Subjects List -->
+                        <div id="hiddenSubjectsContainer">
+                            <div style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+                                <i class="fas fa-info-circle"></i>
+                                المواد المخفية حالياً:
+                            </div>
+                            <div class="hidden-subjects-list" id="hiddenSubjectsList">
+                                <!-- Hidden subjects will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-title">
+                    <i class="fas fa-info-circle"></i>
+                    معلومات المواد المتاحة - <span id="infoSheetTitle">الصف الثاني علمي</span>
+                </div>
+                <table class="data-table" id="subjectsInfo">
+                    <thead>
+                        <tr>
+                            <th>المادة</th>
+                            <th>الاختبار</th>
+                            <th>المجموع</th>
+                            <th>الدرجة القصوى للاختبار</th>
+                            <th>الدرجة القصوى للمجموع</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectsInfoBody">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Reports Section -->
+        <section id="reports" class="section">
+            <div class="reports-section">
+                <div class="reports-icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                <div class="reports-title">تصدير التقارير</div>
+                <div class="reports-desc">
+                    يمكنك تصدير تقارير كاملة عن نتائج الطلاب بتنسيقات متعددة. اختر نوع التقرير المطلوب:
+                </div>
+                
+                <!-- Export Options Cards -->
+                <div class="export-options">
+                    <!-- PDF Export -->
+<div class="export-card pdf" onclick="openOnlineReport()">
+                        <div class="export-icon pdf">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>تصدير إلى PDF</h3>
+                        <p>تقرير احترافي بتنسيق PDF يشبه النموذج الرسمي للتحليل المدرسي</p>
+                        <div class="export-features">
+                            <span><i class="fas fa-check"></i> دعم اللغة العربية</span>
+                            <span><i class="fas fa-check"></i> اتجاه من اليمين لليسار</span>
+                            <span><i class="fas fa-check"></i> جاهز للطباعة</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Excel Export -->
+                    <div class="export-card excel" onclick="exportToExcel()">
+                        <div class="export-icon excel">
+                            <i class="fas fa-file-excel"></i>
+                        </div>
+                        <h3>تصدير إلى Excel</h3>
+                        <p>بيانات كاملة بتنسيق XLSX للتحليل الإحصائي المتقدم</p>
+                        <div class="export-features">
+                            <span><i class="fas fa-check"></i> دعم اللغة العربية</span>
+                            <span><i class="fas fa-check"></i> جداول منظمة</span>
+                            <span><i class="fas fa-check"></i> إحصائيات تلقائية</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Advanced Options -->
+                <div class="advanced-options">
+                    <h4><i class="fas fa-cog"></i> خيارات متقدمة للتصدير</h4>
+                    <div class="options-grid">
+                        <div class="option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeCharts" checked>
+                                <span>تضمين الرسوم البيانية</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeSlices" checked>
+                                <span>تضمين شرائح الدرجات</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeTopStudents" checked>
+                                <span>تضمين قائمة الأوائل</span>
+                            </label>
+                        </div>
+                        <div class="option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeStatistics" checked>
+                                <span>تضمين الإحصائيات العامة</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Export Preview -->
+                <div class="export-preview" id="exportPreview">
+                    <div class="preview-header">
+                        <div class="preview-title">
+                            <i class="fas fa-eye"></i> معاينة قبل التصدير
+                        </div>
+                        <button class="btn btn-secondary" onclick="closePreview()">
+                            <i class="fas fa-times"></i> إغلاق
+                        </button>
+                    </div>
+                    <div class="preview-content" id="previewContent">
+                        <!-- Preview content will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showPreview()">
+                        <i class="fas fa-eye"></i>
+                        معاينة التقرير
+                    </button>
+                    <button class="btn btn-success" onclick="exportAllFormats()">
+                        <i class="fas fa-download"></i>
+                        تصدير جميع الصيغ
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Export Loading Overlay -->
+    <div class="export-loading" id="exportLoading">
+        <div class="export-loading-content">
+            <div class="export-loading-spinner"></div>
+            <div id="exportLoadingText">جاري تحضير التقرير...</div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div>مدرسة الدكتور أحمد زويل الثانوية بنات Zoweil365 &copy; <span id="currentYear"></span></div>
+        <div style="margin-top: 0.5rem; font-size: 0.8rem;">
+            
+جميع الحقوق محفوظة للمدرسة        
+        </div>
+    </footer>
+
+    <!-- PDF Temp Container -->
+    <div id="pdfArea" style="display:none; direction:rtl; background:#fff; padding:20px;"></div>
+
+    <script>
+        // Constants and Global Variables
+        const SCIENCE_SHEET_ID = "1AAaZ2Q5AaQ_AgSgJEHVe4TJST6k-Stns";
+        const LITERARY_SHEET_ID = "1QpE3iT7PT5JBUftCX0OHMBvKN259b-pf";
+        const GRADE1_SHEET_ID = "1sXfKC89yHD0Th9vvDC6ju80ak7leI7gj";
+        
+        let students = [];
+        let filtered = [];
+        let PASS_MARK = 190;
+        let currentSheet = 'science'; // 'science' or 'literary' or 'grade1'
+        
+        // تعريف المواد الأصلية لكل تخصص
+        const originalScienceSubjects = {
+            "اللغة العربية": {test: 5, total: 6, testMax: 24, totalMax: 80},
+            "اللغة الإنجليزية": {test: 7, total: 8, testMax: 18, totalMax: 60},
+            "الرياضيات": {test: 9, total: 10, testMax: 18, totalMax: 60},
+            "الكيمياء": {test: 11, total: 12, testMax: 18, totalMax: 60},
+            "الفيزياء": {test: 13, total: 14, testMax: 18, totalMax: 60},
+            "التاريخ": {test: 15, total: 16, testMax: 18, totalMax: 60},
+            "التربية الدينية": {test: 17, total: 18, testMax: 12, totalMax: 40},
+            "اللغة الثانية": {test: 19, total: 20, testMax: 12, totalMax: 40},
+            "المواطنة": {test: 21, total: 22, testMax: 3, totalMax: 10}
+        };
+        
+        const originalLiterarySubjects = {
+            "اللغة العربية": {test: 5, total: 6, testMax: 24, totalMax: 80},
+            "اللغة الإنجليزية": {test: 7, total: 8, testMax: 18, totalMax: 60},
+            "الرياضيات": {test: 9, total: 10, testMax: 18, totalMax: 60},
+            "جغرافيا": {test: 11, total: 12, testMax: 18, totalMax: 60},
+            "علم نفس": {test: 13, total: 14, testMax: 18, totalMax: 60},
+            "التاريخ": {test: 15, total: 16, testMax: 18, totalMax: 60},
+            "التربية الدينية": {test: 17, total: 18, testMax: 12, totalMax: 40},
+            "اللغة الثانية": {test: 19, total: 20, testMax: 12, totalMax: 40},
+            "المواطنة": {test: 21, total: 22, testMax: 3, totalMax: 10}
+        };
+        
+        const originalGrade1Subjects = {
+            "اللغة العربية": {test: 5, total: 6, testMax: 30, totalMax: 100},
+            "اللغة الإنجليزية": {test: 7, total: 8, testMax: 30, totalMax: 100},
+            "الرياضيات": {test: 9, total: 10, testMax: 30, totalMax: 100},
+            "علوم متكاملة": {test: 11, total: 12, testMax: 30, totalMax: 100},
+            "التاريخ": {test: 13, total: 14, testMax: 30, totalMax: 100},
+            "الفلسفة": {test: 15, total: 16, testMax: 30, totalMax: 100},
+            "التربية الدينية": {test: 17, total: 18, testMax: 30, totalMax: 100},
+            "اللغة الثانية": {test: 19, total: 20, testMax: 30, totalMax: 100},
+            "البرمجة": {test: 21, total: 22, testMax: 30, totalMax: 100}
+        };
+        
+        // نسخ المواد الأصلية للاستخدام
+        let scienceSubjects = JSON.parse(JSON.stringify(originalScienceSubjects));
+        let literarySubjects = JSON.parse(JSON.stringify(originalLiterarySubjects));
+        let grade1Subjects = JSON.parse(JSON.stringify(originalGrade1Subjects));
+        
+        // المواد المخفية
+        let hiddenSubjects = {
+            science: [],
+            literary: [],
+            grade1: []
+        };
+        
+        // درجات النجاح لكل صف
+        let passMarks = {
+            science: 190,
+            literary: 190,
+            grade1: 300
+        };
+        
+        // أعمدة المجموع الكلي لكل صف
+        const TOTAL_COLUMNS = {
+            science: 23,
+            literary: 23,
+            grade1: 23
+        };
+        
+        // DOM Elements
+        const menuToggle = document.getElementById('menuToggle');
+        const navContainer = document.getElementById('navContainer');
+        const currentYear = document.getElementById('currentYear');
+        const tableLoading = document.getElementById('tableLoading');
+        const currentSheetTitle = document.getElementById('currentSheetTitle');
+        const chartSheetTitle = document.getElementById('chartSheetTitle');
+        const topSheetTitle = document.getElementById('topSheetTitle');
+        const infoSheetTitle = document.getElementById('infoSheetTitle');
+        const exportLoading = document.getElementById('exportLoading');
+        const exportLoadingText = document.getElementById('exportLoadingText');
+        const exportPreview = document.getElementById('exportPreview');
+        const previewContent = document.getElementById('previewContent');
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            currentYear.textContent = new Date().getFullYear();
+            
+            // Set up mobile menu toggle
+            menuToggle.addEventListener('click', function() {
+                navContainer.classList.toggle('active');
+            });
+            
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!navContainer.contains(event.target) && !menuToggle.contains(event.target)) {
+                    navContainer.classList.remove('active');
+                }
+            });
+            
+            // Load data from Google Sheets
+            loadData();
+        });
+        
+        // Function to load data from Google Sheets
+        async function loadData() {
+            try {
+                let sheetId;
+                switch(currentSheet) {
+                    case 'science':
+                        sheetId = SCIENCE_SHEET_ID;
+                        PASS_MARK = passMarks.science;
+                        break;
+                    case 'literary':
+                        sheetId = LITERARY_SHEET_ID;
+                        PASS_MARK = passMarks.literary;
+                        break;
+                    case 'grade1':
+                        sheetId = GRADE1_SHEET_ID;
+                        PASS_MARK = passMarks.grade1;
+                        break;
+                    default:
+                        sheetId = SCIENCE_SHEET_ID;
+                        PASS_MARK = passMarks.science;
+                }
+                
+                if (!sheetId || sheetId === "YOUR_SHEET_ID_HERE") {
+                    tableLoading.innerHTML = `
+                        <div style="color: var(--warning); text-align: center;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <div>خطأ في جلب البيانات</div>
+                            <div style="font-size: 0.9rem; margin-top: 0.5rem;">
+تأكد من اتصالك بالانترنت
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // بناء الرابط لتحويل الشيت إلى JSON
+                const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json`;
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const text = await response.text();
+                
+                // تحليل استجابة Google Visualization API
+                const jsonStr = text.substring(47).slice(0, -2);
+                
+                if (!jsonStr) {
+                    throw new Error('Failed to parse Google Sheets data');
+                }
+                
+                const data = JSON.parse(jsonStr);
+                
+                // تحويل البيانات إلى مصفوفة الطلاب
+                if (data.table && data.table.rows) {
+                    students = data.table.rows.map(r => {
+                        return r.c ? r.c.map(c => c ? (c.v || 0) : 0) : [];
+                    });
+                } else {
+                    throw new Error('Invalid data structure from Google Sheets');
+                }
+                
+                filtered = [...students];
+                
+                // Hide loading indicator
+                tableLoading.style.display = 'none';
+                
+                // Initialize the app
+                initApp();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                tableLoading.innerHTML = `
+                    <div style="color: var(--danger); text-align: center;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <div>حدث خطأ في تحميل البيانات</div>
+                        <div style="font-size: 0.9rem; margin: 1rem 0; color: var(--gray);">
+                            تأكد من:<br>
+                             اتصال الإنترنت
+                        </div>
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-redo"></i>
+                            إعادة المحاولة
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Switch between sheets
+        function switchSheet(sheetType) {
+            currentSheet = sheetType;
+            
+            // Update active tab button
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update PASS_MARK based on sheet type
+            PASS_MARK = passMarks[currentSheet];
+            
+            // Update titles
+            let sheetTitle;
+            switch(sheetType) {
+                case 'science':
+                    sheetTitle = 'الصف الثاني علمي';
+                    break;
+                case 'literary':
+                    sheetTitle = 'الصف الثاني أدبي';
+                    break;
+                case 'grade1':
+                    sheetTitle = 'الصف الأول الثانوي';
+                    break;
+                default:
+                    sheetTitle = 'الصف الثاني علمي';
+            }
+            
+            currentSheetTitle.textContent = sheetTitle;
+            chartSheetTitle.textContent = sheetTitle;
+            topSheetTitle.textContent = sheetTitle;
+            infoSheetTitle.textContent = sheetTitle;
+            
+            // Update pass mark display
+            document.getElementById('currentPassMark').textContent = PASS_MARK;
+            document.getElementById('passMark').value = PASS_MARK;
+            
+            // Update grade 1 pass mark display
+            if (document.getElementById('grade1PassMark')) {
+                document.getElementById('grade1PassMark').value = passMarks.grade1;
+            }
+            
+            // Reload data and reinitialize
+            tableLoading.style.display = 'flex';
+            loadData();
+        }
+        
+        // Set grade 1 pass mark
+        function setGrade1PassMark() {
+            const grade1PassMarkInput = document.getElementById('grade1PassMark');
+            passMarks.grade1 = Number(grade1PassMarkInput.value);
+            
+            if (currentSheet === 'grade1') {
+                PASS_MARK = passMarks.grade1;
+                document.getElementById('currentPassMark').textContent = PASS_MARK;
+                document.getElementById('passMark').value = PASS_MARK;
+                renderStats();
+                renderTop();
+                renderMainTable();
+            }
+            
+            showNotification(`تم تعيين درجة النجاح للصف الأول إلى ${passMarks.grade1}`, 'success');
+        }
+        
+        // Initialize the application
+        function initApp() {
+            buildFilters();
+            buildSubjectLists();
+            renderAll();
+            updateHiddenSubjectsList();
+        }
+        
+        // Get current subjects based on sheet type
+        function getCurrentSubjects() {
+            switch(currentSheet) {
+                case 'science':
+                    return scienceSubjects;
+                case 'literary':
+                    return literarySubjects;
+                case 'grade1':
+                    return grade1Subjects;
+                default:
+                    return scienceSubjects;
+            }
+        }
+        
+        // Get original subjects based on sheet type
+        function getOriginalSubjects() {
+            switch(currentSheet) {
+                case 'science':
+                    return originalScienceSubjects;
+                case 'literary':
+                    return originalLiterarySubjects;
+                case 'grade1':
+                    return originalGrade1Subjects;
+                default:
+                    return originalScienceSubjects;
+            }
+        }
+        
+        // Get current hidden subjects
+        function getCurrentHiddenSubjects() {
+            return hiddenSubjects[currentSheet];
+        }
+        
+        // Get current total column index
+        function getTotalColumnIndex() {
+            return TOTAL_COLUMNS[currentSheet];
+        }
+        
+        // Show/hide sections
+        function showSection(id) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(id).classList.add('active');
+            
+            // Add active class to corresponding nav button
+            const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => 
+                btn.getAttribute('onclick') === `showSection('${id}')`
+            );
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // Close mobile menu on selection
+            if (window.innerWidth <= 768) {
+                navContainer.classList.remove('active');
+            }
+        }
+        
+        // Build filter dropdowns
+        function buildFilters() {
+            const classes = new Set();
+            
+            students.forEach(s => {
+                const classValue = String(s[3]).trim();
+                if (classValue) classes.add(classValue);
+            });
+            
+            // Build class filter
+            const classFilter = document.getElementById('classFilter');
+            classFilter.innerHTML = '<option value="">كل الفصول</option>';
+            classes.forEach(v => {
+                classFilter.innerHTML += `<option value="${v}">${v}</option>`;
+            });
+        }
+        
+        // Build subject lists for dropdowns
+        function buildSubjectLists() {
+            const subjects = getCurrentSubjects();
+            const originalSubjects = getOriginalSubjects();
+            const hidden = getCurrentHiddenSubjects();
+            
+            const subjectSelect = document.getElementById('subjectSelect');
+            const sliceSubject = document.getElementById('sliceSubject');
+            const subjectAction = document.getElementById('subjectAction');
+            
+            // Clear existing options
+            subjectSelect.innerHTML = '';
+            sliceSubject.innerHTML = '';
+            subjectAction.innerHTML = '';
+            
+            // Add subjects to dropdowns
+            for (let subject in subjects) {
+                subjectSelect.innerHTML += `<option value="${subject}">${subject}</option>`;
+                sliceSubject.innerHTML += `<option value="${subject}">${subject}</option>`;
+            }
+            
+            // Add all subjects (including hidden ones) to action dropdown
+            for (let subject in originalSubjects) {
+                const isHidden = hidden.includes(subject);
+                subjectAction.innerHTML += `<option value="${subject}">${subject} ${isHidden ? '(مخفية)' : ''}</option>`;
+            }
+            
+            // Update subjects info table
+            updateSubjectsInfo();
+        }
+        
+        // Update hidden subjects list display
+        function updateHiddenSubjectsList() {
+            const hiddenList = document.getElementById('hiddenSubjectsList');
+            const hiddenContainer = document.getElementById('hiddenSubjectsContainer');
+            const hidden = getCurrentHiddenSubjects();
+            
+            if (hidden.length === 0) {
+                hiddenList.innerHTML = '<div style="color: var(--gray); font-style: italic;">لا توجد مواد مخفية</div>';
+                return;
+            }
+            
+            hiddenList.innerHTML = '';
+            hidden.forEach(subject => {
+                const tag = document.createElement('div');
+                tag.className = 'hidden-subject-tag';
+                tag.innerHTML = `
+                    ${subject}
+                    <button onclick="restoreSubject('${subject}')" style="background: none; border: none; color: var(--success); cursor: pointer;">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                `;
+                hiddenList.appendChild(tag);
+            });
+        }
+        
+        // Restore hidden subject
+        function restoreSubject(subject) {
+            const hidden = getCurrentHiddenSubjects();
+            const index = hidden.indexOf(subject);
+            
+            if (index !== -1) {
+                hidden.splice(index, 1);
+                
+                // إعادة المادة إلى القائمة
+                const originalSubjects = getOriginalSubjects();
+                const currentSubjects = getCurrentSubjects();
+                
+                if (originalSubjects[subject]) {
+                    currentSubjects[subject] = originalSubjects[subject];
+                }
+                
+                // إعادة بناء القوائم
+                buildSubjectLists();
+                updateHiddenSubjectsList();
+                renderAll();
+                
+                showNotification(`تم إظهار مادة ${subject}`, 'success');
+            }
+        }
+        
+        // Update subjects information table
+        function updateSubjectsInfo() {
+            const subjects = getCurrentSubjects();
+            const originalSubjects = getOriginalSubjects();
+            const hidden = getCurrentHiddenSubjects();
+            const subjectsInfoBody = document.getElementById('subjectsInfoBody');
+            subjectsInfoBody.innerHTML = '';
+            
+            for (let subject in originalSubjects) {
+                const sub = originalSubjects[subject];
+                const isHidden = hidden.includes(subject);
+                const isVisible = subjects[subject] !== undefined;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${subject}</td>
+                    <td>العمود ${sub.test}</td>
+                    <td>العمود ${sub.total}</td>
+                    <td>${sub.testMax}</td>
+                    <td>${sub.totalMax}</td>
+                    <td>
+                        <span style="color: ${isHidden ? 'var(--danger)' : 'var(--success)'}; font-weight: bold;">
+                            ${isHidden ? 'مخفية' : (isVisible ? 'ظاهرة' : 'غير متاحة')}
+                        </span>
+                    </td>
+                `;
+                subjectsInfoBody.appendChild(row);
+            }
+        }
+        
+        // Set up event listeners for filters
+        document.getElementById('search').addEventListener('input', applyFilters);
+        document.getElementById('classFilter').addEventListener('change', applyFilters);
+        
+        // Apply filters to the data
+        function applyFilters() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const classValue = document.getElementById('classFilter').value;
+            
+            filtered = students.filter(s => {
+                const nameMatch = !searchValue || 
+                    s[1].toString().toLowerCase().includes(searchValue) || 
+                    s[4].toString().includes(searchValue);
+                
+                const classMatch = !classValue || String(s[3]).trim() === classValue;
+                
+                return nameMatch && classMatch;
+            });
+            
+            renderAll();
+        }
+        
+        // Render all components
+        function renderAll() {
+            renderMainTable();
+            renderStats();
+            renderTop();
+            renderSubjectChart();
+            renderSlices();
+        }
+        
+        // Render main table with student data
+        function renderMainTable() {
+            const mainTable = document.getElementById('mainTable');
+            const subjects = getCurrentSubjects();
+            const totalColumn = getTotalColumnIndex();
+            
+            if (filtered.length === 0) {
+                mainTable.innerHTML = `
+                    <tr>
+                        <td colspan="100" style="padding: 3rem; text-align: center; color: var(--gray);">
+                            <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <div>لا توجد بيانات تطابق معايير البحث</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Build table header
+            let header = '<tr><th>مسلسل</th><th>اسم الطالب</th><th>الفصل</th><th>رقم الجلوس</th>';
+            
+            for (let subject in subjects) {
+                header += `<th>${subject}</th>`;
+            }
+            
+            header += '<th>المجموع الكلي</th></tr>';
+            mainTable.innerHTML = header;
+            
+            // Build table rows
+            filtered.forEach((student, index) => {
+                let row = '<tr>';
+                row += `<td>${index + 1}</td>`;
+                row += `<td>${student[1]}</td>`;
+                row += `<td>${student[3]}</td>`;
+                row += `<td>${student[4]}</td>`;
+                
+                // عرض درجات المواد
+                for (let subject in subjects) {
+                    const sub = subjects[subject];
+                    const value = Number(student[sub.total]) || 0;
+                    
+                    const max = sub.totalMax;
+                    const percentage = max > 0 ? (value / max) * 100 : 0;
+                    
+                    let cellClass = '';
+                    if (percentage >= 85) cellClass = 'style="color: var(--success); font-weight: bold;"';
+                    else if (percentage >= 65) cellClass = 'style="color: #3b82f6;"';
+                    else if (percentage >= 50) cellClass = 'style="color: var(--warning);"';
+                    else cellClass = 'style="color: var(--danger);"';
+                    
+                    row += `<td ${cellClass}>${value}</td>`;
+                }
+                
+                // عرض المجموع الكلي من العمود المخصص للمجموع
+                const total = student[totalColumn] || 0;
+                
+                // Color code total based on pass mark
+                const totalClass = total >= PASS_MARK ? 
+                    'style="color: var(--success); font-weight: bold;"' : 
+                    'style="color: var(--danger); font-weight: bold;"';
+                
+                row += `<td ${totalClass}>${total}</td>`;
+                row += '</tr>';
+                
+                mainTable.innerHTML += row;
+            });
+        }
+        
+        // Render statistics cards
+        function renderStats() {
+            const totalCount = document.getElementById('totalCount');
+            const passCount = document.getElementById('passCount');
+            const failCount = document.getElementById('failCount');
+            const successRate = document.getElementById('successRate');
+            const currentPassMark = document.getElementById('currentPassMark');
+            const totalColumn = getTotalColumnIndex();
+            
+            totalCount.textContent = filtered.length;
+            
+            // Calculate pass/fail counts based on total column
+            let pass = 0;
+            filtered.forEach(s => {
+                const total = s[totalColumn] || 0;
+                if (total >= PASS_MARK) pass++;
+            });
+            
+            passCount.textContent = pass;
+            failCount.textContent = filtered.length - pass;
+            
+            // Calculate success rate
+            const rate = filtered.length ? ((pass / filtered.length) * 100).toFixed(1) : 0;
+            successRate.textContent = `${rate}%`;
+            
+            // Update current pass mark display
+            currentPassMark.textContent = PASS_MARK;
+        }
+        
+        // Render top students table
+        function renderTop() {
+            const topTable = document.getElementById('topTable');
+            const totalColumn = getTotalColumnIndex();
+            
+            if (filtered.length === 0) {
+                topTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="padding: 3rem; text-align: center; color: var(--gray);">
+                            <i class="fas fa-trophy" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <div>لا توجد بيانات لعرض الأوائل</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Calculate totals from total column and sort
+            const rankedStudents = [...filtered].map(s => {
+                const total = s[totalColumn] || 0;
+                return {
+                    name: s[1],
+                    seat: s[4],
+                    class: s[3],
+                    total: total
+                };
+            }).sort((a, b) => b.total - a.total).slice(0, 10);
+            
+            // Build table
+            topTable.innerHTML = `
+                <tr>
+                    <th>الترتيب</th>
+                    <th>اسم الطالب</th>
+                    <th>رقم الجلوس</th>
+                    <th>الفصل</th>
+                    <th>المجموع الكلي</th>
+                </tr>
+            `;
+            
+            rankedStudents.forEach((student, index) => {
+                const medal = index < 3 ? ['🥇', '🥈', '🥉'][index] : '';
+                const row = `
+                    <tr>
+                        <td>${index + 1} ${medal}</td>
+                        <td>${student.name}</td>
+                        <td>${student.seat}</td>
+                        <td>${student.class}</td>
+                        <td style="font-weight: bold; color: ${student.total >= PASS_MARK ? 'var(--success)' : 'var(--danger)'}">
+                            ${student.total}
+                        </td>
+                    </tr>
+                `;
+                topTable.innerHTML += row;
+            });
+        }
+        
+        // Render subject chart
+        function renderSubjectChart() {
+            const subjects = getCurrentSubjects();
+            const subjectSelect = document.getElementById('subjectSelect');
+            const subjectChart = document.getElementById('subjectChart');
+            const subjectName = subjectSelect.value || Object.keys(subjects)[0];
+            
+            if (!subjectName || !subjects[subjectName]) return;
+            
+            const subject = subjects[subjectName];
+            const idx = subject.total;
+            
+            const data = filtered.map(s => s[idx] || 0);
+            const labels = filtered.map(s => s[1]);
+            const maxScore = subject.totalMax;
+            
+            // Destroy existing chart if it exists
+            if (subjectChart.chart) {
+                subjectChart.chart.destroy();
+            }
+            
+            // Create gradient for chart
+            const ctx = subjectChart.getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            
+            // اختيار لون حسب التخصص
+            if (currentSheet === 'science') {
+                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.7)');
+                gradient.addColorStop(1, 'rgba(59, 130, 246, 0.1)');
+            } else if (currentSheet === 'literary') {
+                gradient.addColorStop(0, 'rgba(16, 185, 129, 0.7)');
+                gradient.addColorStop(1, 'rgba(16, 185, 129, 0.1)');
+            } else {
+                gradient.addColorStop(0, 'rgba(168, 85, 247, 0.7)');
+                gradient.addColorStop(1, 'rgba(168, 85, 247, 0.1)');
+            }
+            
+            // Create new chart
+            subjectChart.chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `درجات ${subjectName} (${filtered.length} طالب)`,
+                        data: data,
+                        backgroundColor: gradient,
+                        borderColor: currentSheet === 'science' ? 'rgba(59, 130, 246, 1)' : 
+                                     currentSheet === 'literary' ? 'rgba(16, 185, 129, 1)' : 
+                                     'rgba(168, 85, 247, 1)',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        maxBarThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Tahoma'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const percentage = maxScore > 0 ? ((value / maxScore) * 100).toFixed(1) : 0;
+                                    return `الدرجة: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: maxScore,
+                            title: {
+                                display: true,
+                                text: 'الدرجة'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'الطلاب'
+                            },
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Event listener for subject selection in chart
+        document.getElementById('subjectSelect').addEventListener('change', renderSubjectChart);
+        
+        // Render slices tables
+        function renderSlices() {
+            const subjects = getCurrentSubjects();
+            const sliceSubject = document.getElementById('sliceSubject');
+            const subjectName = sliceSubject.value || Object.keys(subjects)[0];
+            
+            if (!subjectName || !subjects[subjectName]) return;
+            
+            const subject = subjects[subjectName];
+            const testSlice = document.getElementById('testSlice');
+            const totalSlice = document.getElementById('totalSlice');
+            
+            if (filtered.length === 0) {
+                testSlice.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="padding: 2rem; text-align: center; color: var(--gray);">
+                            <i class="fas fa-info-circle"></i>
+                            لا توجد بيانات لعرض الشرائح
+                        </td>
+                    </tr>
+                `;
+                
+                totalSlice.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="padding: 2rem; text-align: center; color: var(--gray);">
+                            <i class="fas fa-info-circle"></i>
+                            لا توجد بيانات لعرض الشرائح
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Calculate test slices
+            let t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+            filtered.forEach(student => {
+                const testScore = Number(student[subject.test]) || 0;
+                const p = subject.testMax > 0 ? (testScore / subject.testMax) * 100 : 0;
+                if (p < 50) t1++;
+                else if (p < 65) t2++;
+                else if (p < 85) t3++;
+                else t4++;
+            });
+            
+            // حساب النسب المئوية
+            const totalStudents = filtered.length;
+            const t1Percent = totalStudents ? ((t1 / totalStudents) * 100).toFixed(1) : 0;
+            const t2Percent = totalStudents ? ((t2 / totalStudents) * 100).toFixed(1) : 0;
+            const t3Percent = totalStudents ? ((t3 / totalStudents) * 100).toFixed(1) : 0;
+            const t4Percent = totalStudents ? ((t4 / totalStudents) * 100).toFixed(1) : 0;
+            
+            // Build test slices table
+            testSlice.innerHTML = `
+                <tr>
+                    <th>النسبة</th>
+                    <th>التصنيف</th>
+                    <th>عدد الطلاب</th>
+                    <th>النسبة المئوية</th>
+                    <th>النسبة (%)</th>
+                </tr>
+                <tr style="color: var(--danger);">
+                    <td>أقل من 50%</td>
+                    <td>ضعيف</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'test', 0, 50, 'ضعيف', 'أقل من 50%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${t1}
+                    </td>
+                    <td>${t1Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(239, 68, 68, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${t1Percent}%; min-width: 30px;">
+                            ${t1Percent}%
+                        </div>
+                    </td>
+                </tr>
+                <tr style="color: var(--warning);">
+                    <td>50% - 65%</td>
+                    <td>متوسط</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(245, 158, 11, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'test', 50, 65, 'متوسط', '50% - 65%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${t2}
+                    </td>
+                    <td>${t2Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${t2Percent}%; min-width: 30px;">
+                            ${t2Percent}%
+                        </div>
+                    </td>
+                </tr>
+                <tr style="color: #3b82f6;">
+                    <td>65% - 85%</td>
+                    <td>جيد</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(59, 130, 246, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'test', 65, 85, 'جيد', '65% - 85%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${t3}
+                    </td>
+                    <td>${t3Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(59, 130, 246, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${t3Percent}%; min-width: 30px;">
+                            ${t3Percent}%
+                        </div>
+                    </td>
+                </tr>
+                <tr style="color: var(--success);">
+                    <td>85% - 100%</td>
+                    <td>ممتاز</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(16, 185, 129, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'test', 85, 100, 'ممتاز', '85% - 100%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${t4}
+                    </td>
+                    <td>${t4Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(16, 185, 129, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${t4Percent}%; min-width: 30px;">
+                            ${t4Percent}%
+                        </div>
+                    </td>
+                </tr>
+            `;
+            
+            // Calculate total slices
+            let g1 = 0, g2 = 0, g3 = 0, g4 = 0;
+            filtered.forEach(student => {
+                const totalScore = Number(student[subject.total]) || 0;
+                const p = subject.totalMax > 0 ? (totalScore / subject.totalMax) * 100 : 0;
+                if (p < 50) g1++;
+                else if (p < 65) g2++;
+                else if (p < 85) g3++;
+                else g4++;
+            });
+            
+            // حساب النسب المئوية للمجموع
+            const g1Percent = totalStudents ? ((g1 / totalStudents) * 100).toFixed(1) : 0;
+            const g2Percent = totalStudents ? ((g2 / totalStudents) * 100).toFixed(1) : 0;
+            const g3Percent = totalStudents ? ((g3 / totalStudents) * 100).toFixed(1) : 0;
+            const g4Percent = totalStudents ? ((g4 / totalStudents) * 100).toFixed(1) : 0;
+            
+            // Build total slices table
+            totalSlice.innerHTML = `
+                <tr>
+                    <th>النسبة</th>
+                    <th>التصنيف</th>
+                    <th>عدد الطلاب</th>
+                    <th>النسبة المئوية</th>
+                    <th>النسبة (%)</th>
+                </tr>
+                <tr style="color: var(--danger);">
+                    <td>أقل من 50%</td>
+                    <td>ضعيف</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'total', 0, 50, 'ضعيف', 'أقل من 50%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${g1}
+                    </td>
+                    <td>${g1Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(239, 68, 68, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${g1Percent}%; min-width: 30px;">
+                            ${g1Percent}%
+                        </div>
+                    </td>
+                </tr>
+                <tr style="color: var(--warning);">
+                    <td>50% - 65%</td>
+                    <td>متوسط</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(245, 158, 11, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'total', 50, 65, 'متوسط', '50% - 65%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${g2}
+                    </td>
+                    <td>${g2Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${g2Percent}%; min-width: 30px;">
+                            ${g2Percent}%
+                        </div>
+                    </td>
+                </tr>
+                <tr style="color: #3b82f6;">
+                    <td>65% - 85%</td>
+                    <td>جيد</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(59, 130, 246, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'total', 65, 85, 'جيد', '65% - 85%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${g3}
+                    </td>
+                    <td>${g3Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(59, 130, 246, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${g3Percent}%; min-width: 30px;">
+                            ${g3Percent}%
+                        </div>
+                    </td>
+                </tr>
+                <tr style="color: var(--success);">
+                    <td>85% - 100%</td>
+                    <td>ممتاز</td>
+                    <td style="cursor: pointer; font-weight: bold; transition: all 0.3s;" 
+                        onmouseover="this.style.backgroundColor='rgba(16, 185, 129, 0.1)'; this.style.transform='scale(1.1)';" 
+                        onmouseout="this.style.backgroundColor=''; this.style.transform='scale(1)';"
+                        onclick="exportSliceStudentsToPDF('${subjectName}', 'total', 85, 100, 'ممتاز', '85% - 100%')"
+                        title="اضغط لتصدير قائمة الطلاب">
+                        ${g4}
+                    </td>
+                    <td>${g4Percent}%</td>
+                    <td>
+                        <div style="background-color: rgba(16, 185, 129, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: ${g4Percent}%; min-width: 30px;">
+                            ${g4Percent}%
+                        </div>
+                    </td>
+                </tr>
+            `;
+            
+            // إضافة صف إحصائي إضافي
+            const totalPercent = totalStudents ? 100 : 0;
+            const infoRow = `
+                <tr class="info-row">
+                    <td colspan="2">إجمالي عدد الطلاب</td>
+                    <td>${totalStudents}</td>
+                    <td>${totalPercent}%</td>
+                    <td>
+                        <div style="background-color: rgba(107, 114, 128, 0.2); border-radius: 4px; padding: 0.25rem 0.5rem; width: 100%;">
+                            100%
+                        </div>
+                    </td>
+                </tr>
+            `;
+            
+            testSlice.innerHTML += infoRow;
+            totalSlice.innerHTML += infoRow;
+        }
+        
+        // Event listener for slice subject selection
+        document.getElementById('sliceSubject').addEventListener('change', renderSlices);
+        
+        // Apply pass mark
+        function applyPassMark() {
+            const passMarkInput = document.getElementById('passMark');
+            const newPassMark = Number(passMarkInput.value);
+            PASS_MARK = newPassMark;
+            
+            // حفظ درجة النجاح للصف الحالي
+            passMarks[currentSheet] = newPassMark;
+            
+            renderStats();
+            renderTop();
+            renderMainTable();
+            
+            showNotification(`تم تعيين درجة النجاح إلى ${PASS_MARK}`, 'success');
+        }
+        
+        // Toggle subject visibility
+        function toggleSubject(action) {
+            const subjectAction = document.getElementById('subjectAction');
+            const subject = subjectAction.value;
+            const subjects = getCurrentSubjects();
+            const hidden = getCurrentHiddenSubjects();
+            const originalSubjects = getOriginalSubjects();
+            
+            if (!subject || !originalSubjects[subject]) {
+                showNotification('الرجاء اختيار مادة', 'error');
+                return;
+            }
+            
+            if (action === 'hide') {
+                // إخفاء المادة
+                if (!hidden.includes(subject)) {
+                    hidden.push(subject);
+                    delete subjects[subject];
+                    
+                    buildSubjectLists();
+                    updateHiddenSubjectsList();
+                    renderAll();
+                    
+                    showNotification(`تم إخفاء مادة ${subject}`, 'info');
+                } else {
+                    showNotification(`مادة ${subject} مخفية بالفعل`, 'warning');
+                }
+            } else if (action === 'show') {
+                // إظهار المادة
+                restoreSubject(subject);
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                right: 20px;
+                background-color: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button onclick="this.parentElement.remove()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentElement) {
+                            notification.parentElement.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 4000);
+            
+            // Add CSS animations if not already added
+            if (!document.getElementById('notification-styles')) {
+                const style = document.createElement('style');
+                style.id = 'notification-styles';
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateY(-100%); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                    @keyframes slideOut {
+                        from { transform: translateY(0); opacity: 1; }
+                        to { transform: translateY(-100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+        
+        // Show export loading
+        function showExportLoading(text = 'جاري تحضير التقرير...') {
+            exportLoadingText.textContent = text;
+            exportLoading.style.display = 'flex';
+        }
+        
+        // Hide export loading
+        function hideExportLoading() {
+            exportLoading.style.display = 'none';
+        }
+        
+        // Show preview
+        function showPreview() {
+            exportPreview.style.display = 'block';
+            generatePreview();
+        }
+        
+        // Get subject column index
+        function getSubjectColumnIndex(subject) {
+            const subjects = getCurrentSubjects();
+            if (!subjects[subject]) return -1;
+            
+            // Get the index of the subject in the table
+            const subjectsList = Object.keys(subjects);
+            const subjectIndex = subjectsList.indexOf(subject);
+            
+            // Add 4 for the first 4 columns (serial, name, class, seat)
+            return subjectIndex + 4;
+        }
+        
+        // Generate grade slices
+        function generateGradeSlices(subject) {
+            const subjects = getCurrentSubjects();
+            const subjectObj = subjects[subject];
+            
+            if (!subjectObj) {
+                console.error('Subject not found:', subject);
+                return;
+            }
+            
+            // Use the existing renderSlices function which already calculates slices
+            renderSlices();
+            
+            // Also update the preview if it's open
+            if (exportPreview.style.display === 'block') {
+                generatePreview();
+            }
+        }
+        
+        // Update grade slices for selected subject
+        function updateGradeSlicesForSelectedSubject() {
+            const subjectSelect = document.getElementById('sliceSubject');
+            if (!subjectSelect) return;
+            
+            const selectedSubject = subjectSelect.value;
+            if (selectedSubject) {
+                generateGradeSlices(selectedSubject);
+            }
+        }
+        
+        // Close preview
+        function closePreview() {
+            exportPreview.style.display = 'none';
+        }
+        
+        // Generate preview content
+        function generatePreview() {
+            const subjects = getCurrentSubjects();
+            const totalColumn = getTotalColumnIndex();
+            
+            let sheetName;
+            switch(currentSheet) {
+                case 'science':
+                    sheetName = 'الثاني علمي';
+                    break;
+                case 'literary':
+                    sheetName = 'الثاني أدبي';
+                    break;
+                case 'grade1':
+                    sheetName = 'الأول الثانوي';
+                    break;
+                default:
+                    sheetName = 'الثاني علمي';
+            }
+            
+            const today = new Date().toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Calculate statistics for preview
+            let passCount = 0;
+            filtered.forEach(s => {
+                const total = s[totalColumn] || 0;
+                if (total >= PASS_MARK) passCount++;
+            });
+            const successRate = filtered.length ? ((passCount / filtered.length) * 100).toFixed(1) : 0;
+            
+            // Get current subject for slices
+            const subjectSelect = document.getElementById('sliceSubject');
+            const currentSubject = subjectSelect ? subjectSelect.value : Object.keys(subjects)[0];
+            
+            let previewHTML = `
+<div style="font-family: Tahoma, Arial, sans-serif; direction: rtl;">
+
+    <!-- رأس الصفحة -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+
+        <!-- البيانات الرسمية (يمين) -->
+        <div style="text-align: right; font-size: 14px; line-height: 1.8;">
+            <div>وزارة التربية والتعليم</div>
+            <div>محافظة الشرقية</div>
+            <div>إدارة العاشر من رمضان التعليمية</div>
+<div dir="rtl">
+    <span style="unicode-bidi:isolate;">توجيه مادة</span>&nbsp;
+    <span style="unicode-bidi:isolate;">:</span>&nbsp;
+    <span style="unicode-bidi:isolate;">${currentSubject}</span>
+</div>
+
+        </div>
+
+        <!-- فراغ يسار -->
+        <div></div>
+
+    </div>
+
+    <!-- العناوين في المنتصف -->
+    <h1 style="text-align: center; color: #1f2937; margin-bottom: 1rem;">
+       <!-- <i class="fas fa-school"></i> -->
+مدرسة الدكتور أحمد زويل الثانوية بنات    </h1>
+    
+    <h2 style="text-align: center; color: #2563eb; margin-bottom: 2rem;">
+        تحليل نتيجة امتحانات الفصل الدراسي الأول للعام الدراسي 2026/2025
+    </h2>
+
+</div>
+
+                    
+                    <div style="background-color: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                        <h3 style="color: #1f2937; margin-bottom: 1rem;">
+                            <i class="fas fa-info-circle"></i>
+                            معلومات الصف
+                        </h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        
+                         <div dir="rtl" style="text-align:right;">
+                         <strong><span>الصف</span>&nbsp;:</strong> ${sheetName}
+                         </div>
+
+                         <div dir="rtl" style="text-align:right;">
+                         <strong><span>تاريخ التقرير</span>&nbsp;:</strong> ${today}
+                         </div>
+                         
+                         <div dir="rtl" style="text-align:right;">
+                         <strong><span>عدد الطلاب</span>&nbsp;:</strong> ${filtered.length}
+                         </div>
+                         
+<!--
+<div dir="rtl" style="text-align:right;">
+    <strong><span>درجة النجاح</span>&nbsp;:</strong> ${PASS_MARK}
+</div>
+-->
+
+                        </div>
+                    </div>
+                    
+<h3 style="color: #1f2937; border-bottom: 2px solid #2563eb; padding-bottom: 0.5rem; margin-bottom: 1rem;" dir="rtl">
+    <i class="fas fa-chart-pie"></i>
+    <span style="unicode-bidi:isolate;">شرائح الدرجات لمادة</span>&nbsp;
+    <span style="unicode-bidi:isolate;">:</span>&nbsp;
+    <span style="unicode-bidi:isolate;">${currentSubject}</span>
+</h3>
+
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem;">
+                            <h4 style="color: #2563eb; text-align: center; margin-bottom: 1rem;">الورقة الامتحانية</h4>
+                            ${generateSlicesTableForPreview('test')}
+                        </div>
+                        
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem;">
+                            <h4 style="color: #2563eb; text-align: center; margin-bottom: 1rem;">اعمال السنة+الورقة الامتحانية</h4>
+                            ${generateSlicesTableForPreview('total')}
+                        </div>
+                    </div>
+                    
+<div style="background-color: #f0f9ff; padding: 2rem; border-radius: 8px; margin-bottom: 2rem; direction: rtl;">
+    
+    <div style="display: flex; justify-content: space-between;">
+
+        <!-- مشرف المادة -->
+        <div style="width: 23%; text-align: center;">
+            <strong>مشرف المادة</strong>
+            <div style="margin-top: 3rem; border-bottom: 2px solid #000; width: 80%; margin-left: auto; margin-right: auto;"></div>
+        </div>
+
+        <!-- رئيس الكنترول -->
+        <div style="width: 23%; text-align: center;">
+            <strong>رئيس الكنترول</strong>
+            <div style="margin-top: 3rem; border-bottom: 2px solid #000; width: 80%; margin-left: auto; margin-right: auto;"></div>
+        </div>
+
+        <!-- وكيل المدرسة -->
+        <div style="width: 23%; text-align: center;">
+            <strong>وكيل المدرسة</strong>
+            <div style="margin-top: 3rem; border-bottom: 2px solid #000; width: 80%; margin-left: auto; margin-right: auto;"></div>
+        </div>
+
+        <!-- مدير المدرسة -->
+        <div style="width: 23%; text-align: center;">
+            <strong>مدير المدرسة</strong>
+            <div style="margin-top: 3rem; border-bottom: 2px solid #000; width: 80%; margin-left: auto; margin-right: auto;"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+                    
+                    <div style="text-align: center; margin-top: 2rem; color: #6b7280; font-size: 0.9rem;">
+                        <p>تم انشاء هذا التقرير بواسطة تطبيق : Zoweil 365</p>
+                    </div>
+                </div>
+            `;
+            
+            previewContent.innerHTML = previewHTML;
+        }
+        
+        // Generate slices table for preview
+        function generateSlicesTableForPreview(type) {
+            const subjects = getCurrentSubjects();
+            const subjectSelect = document.getElementById('sliceSubject');
+            const subjectName = subjectSelect ? subjectSelect.value : Object.keys(subjects)[0];
+            const subject = subjects[subjectName];
+            
+            if (!subject) {
+                return '<p style="text-align: center; color: #6b7280;">لا توجد بيانات</p>';
+            }
+            
+            let t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+            
+            filtered.forEach(student => {
+                let score;
+                let max;
+                
+                if (type === 'test') {
+                    score = Number(student[subject.test]) || 0;
+                    max = subject.testMax;
+                } else {
+                    score = Number(student[subject.total]) || 0;
+                    max = subject.totalMax;
+                }
+                
+                const p = max > 0 ? (score / max) * 100 : 0;
+                if (p < 50) t1++;
+                else if (p < 65) t2++;
+                else if (p < 85) t3++;
+                else t4++;
+            });
+            
+            const totalStudents = filtered.length;
+            const t1Percent = totalStudents ? ((t1 / totalStudents) * 100).toFixed(1) : 0;
+            const t2Percent = totalStudents ? ((t2 / totalStudents) * 100).toFixed(1) : 0;
+            const t3Percent = totalStudents ? ((t3 / totalStudents) * 100).toFixed(1) : 0;
+            const t4Percent = totalStudents ? ((t4 / totalStudents) * 100).toFixed(1) : 0;
+            
+            return `
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #1f2937; color: white;">
+                            <th style="padding: 0.5rem; text-align: center;">النسبة</th>
+                            <th style="padding: 0.5rem; text-align: center;">عدد الطلاب</th>
+                            <th style="padding: 0.5rem; text-align: center;">النسبة المئوية</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">أقل من 50%</td>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">${t1}</td>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">${t1Percent}%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">50% - 65%</td>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">${t2}</td>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">${t2Percent}%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">65% - 85%</td>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">${t3}</td>
+                            <td style="padding: 0.5rem; text-align: center; border-bottom: 1px solid #e5e7eb;">${t3Percent}%</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.5rem; text-align: center;">85% - 100%</td>
+                            <td style="padding: 0.5rem; text-align: center;">${t4}</td>
+                            <td style="padding: 0.5rem; text-align: center;">${t4Percent}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        // Export to PDF
+     function exportToPDF() {
+
+  const element = document.getElementById("pdfArea");
+
+  document.getElementById("exportLoading").style.display = "flex";
+
+  html2canvas(element, {
+    scale: 1,
+    useCORS: true
+  }).then(canvas => {
+
+    const imgData = canvas.toDataURL("image/jpeg", 0.9);
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save("report.pdf");
+
+    document.getElementById("exportLoading").style.display = "none";
+  })
+  .catch(err => {
+    alert("جهازك لا يدعم إنشاء PDF داخل التطبيق");
+    console.error(err);
+    document.getElementById("exportLoading").style.display = "none";
+  });
+
+}
+
+        
+        // Export to Excel
+        async function exportToExcel() {
+            showExportLoading('جاري تحضير ملف Excel...');
+            
+            try {
+                const subjects = getCurrentSubjects();
+                const totalColumn = getTotalColumnIndex();
+                
+                let sheetName;
+                switch(currentSheet) {
+                    case 'science':
+                        sheetName = 'الثاني علمي';
+                        break;
+                    case 'literary':
+                        sheetName = 'الثاني أدبي';
+                        break;
+                    case 'grade1':
+                        sheetName = 'الأول الثانوي';
+                        break;
+                    default:
+                        sheetName = 'الثاني علمي';
+                }
+                
+                // تحضير البيانات
+                const data = [];
+                
+                // إضافة عنوان
+                data.push(['مدرسة / الدكتور أحمد زويل الثانوية بنات']);
+                data.push(['تحليل نتيجة امتحانات الفصل الدراسي الأول 2026/2025']);
+                data.push([`الصف: ${sheetName}`]);
+                data.push([`تاريخ التصدير: ${new Date().toLocaleDateString('ar-EG')}`]);
+                data.push([]);
+                
+                // إحصائيات عامة
+                let passCount = 0;
+                filtered.forEach(s => {
+                    const total = s[totalColumn] || 0;
+                    if (total >= PASS_MARK) passCount++;
+                });
+                const successRate = filtered.length ? ((passCount / filtered.length) * 100).toFixed(1) : 0;
+                
+                data.push(['الإحصائيات العامة']);
+                data.push(['عدد الطلاب', filtered.length]);
+                data.push(['عدد الناجحين', passCount]);
+                data.push(['عدد الراسبين', filtered.length - passCount]);
+                data.push(['نسبة النجاح', `${successRate}%`]);
+                data.push(['درجة النجاح', PASS_MARK]);
+                data.push([]);
+                
+                // عناوين الأعمدة للطلاب
+                const headers = ['مسلسل', 'اسم الطالب', 'الفصل', 'رقم الجلوس'];
+                for (let subject in subjects) {
+                    headers.push(`${subject} (مجموع)`);
+                }
+                headers.push('المجموع الكلي', 'الحالة');
+                data.push(headers);
+                
+                // بيانات الطلاب
+                filtered.forEach((student, index) => {
+                    const row = [
+                        index + 1,
+                        student[1],
+                        student[3],
+                        student[4]
+                    ];
+                    
+                    for (let subject in subjects) {
+                        const sub = subjects[subject];
+                        const value = Number(student[sub.total]) || 0;
+                        row.push(value);
+                    }
+                    
+                    const total = student[totalColumn] || 0;
+                    row.push(total);
+                    row.push(total >= PASS_MARK ? 'ناجح' : 'راسب');
+                    
+                    data.push(row);
+                });
+                
+                data.push([]);
+                
+                // الأوائل
+                data.push(['قائمة الأوائل']);
+                const topHeaders = ['الترتيب', 'اسم الطالب', 'رقم الجلوس', 'الفصل', 'المجموع الكلي', 'الحالة'];
+                data.push(topHeaders);
+                
+                const rankedStudents = [...filtered].map(s => {
+                    const total = s[totalColumn] || 0;
+                    return {
+                        name: s[1],
+                        seat: s[4],
+                        class: s[3],
+                        total: total
+                    };
+                }).sort((a, b) => b.total - a.total).slice(0, 10);
+                
+                rankedStudents.forEach((student, index) => {
+                    data.push([
+                        index + 1,
+                        student.name,
+                        student.seat,
+                        student.class,
+                        student.total,
+                        student.total >= PASS_MARK ? 'ناجح' : 'راسب'
+                    ]);
+                });
+                
+                // إنشاء مصنف Excel
+                const wb = XLSX.utils.book_new();
+                
+                // ورقة البيانات الرئيسية
+                const ws_data = XLSX.utils.aoa_to_sheet(data);
+                XLSX.utils.book_append_sheet(wb, ws_data, 'النتائج');
+                
+                // إعدادات التنسيق
+                ws_data['!cols'] = [
+                    { wch: 8 },  // مسلسل
+                    { wch: 30 }, // اسم الطالب
+                    { wch: 10 }, // الفصل
+                    { wch: 12 }, // رقم الجلوس
+                    ...Object.keys(subjects).map(() => ({ wch: 15 })), // المواد
+                    { wch: 12 }, // المجموع الكلي
+                    { wch: 10 }  // الحالة
+                ];
+                
+                // إعدادات الاتجاه للنص العربي
+                ws_data['!rows'] = [{ hpt: 20 }];
+                
+                // حفظ الملف
+                const filename = `نتائج_الصف_${sheetName}_${new Date().toISOString().slice(0,10)}.xlsx`;
+                XLSX.writeFile(wb, filename);
+                
+                hideExportLoading();
+                showNotification('تم تصدير البيانات إلى Excel بنجاح', 'success');
+                
+            } catch (error) {
+                console.error('Error exporting to Excel:', error);
+                hideExportLoading();
+                showNotification('حدث خطأ أثناء تصدير Excel', 'error');
+            }
+        }
+        
+        // Export all formats
+        async function exportAllFormats() {
+            showExportLoading('جاري تصدير جميع الصيغ...');
+            
+            try {
+                // تصدير PDF أولاً
+                await exportToPDF();
+                
+                // انتظار قليل ثم تصدير Excel
+                setTimeout(async () => {
+                    await exportToExcel();
+                    showNotification('تم تصدير جميع الصيغ بنجاح', 'success');
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error exporting all formats:', error);
+                hideExportLoading();
+                showNotification('حدث خطأ أثناء التصدير', 'error');
+            }
+        }
+        
+        // Export slice students to PDF - With multi-page support and preview
+        async function exportSliceStudentsToPDF(subjectName, type, minPercent, maxPercent, classification, range) {
+            showExportLoading('جاري تحضير قائمة الطلاب...');
+            
+            try {
+                const subjects = getCurrentSubjects();
+                const subject = subjects[subjectName];
+                
+                if (!subject) {
+                    hideExportLoading();
+                    showNotification('المادة غير موجودة', 'error');
+                    return;
+                }
+                
+                // Get the correct column based on type (test or total)
+                const scoreColumn = type === 'test' ? subject.test : subject.total;
+                const maxScore = type === 'test' ? subject.testMax : subject.totalMax;
+                const scoreType = type === 'test' ? 'درجة الاختبار' : 'مجموع المادة';
+                
+                console.log('Filtering students...', { scoreColumn, maxScore, minPercent, maxPercent });
+                
+                // Filter students based on percentage range
+                const sliceStudents = filtered.filter(student => {
+                    const score = Number(student[scoreColumn]) || 0;
+                    const percent = maxScore > 0 ? (score / maxScore) * 100 : 0;
+                    
+                    // For the last slice (85-100), include 100%
+                    if (maxPercent >= 100) {
+                        return percent >= minPercent && percent <= 100;
+                    } else {
+                        return percent >= minPercent && percent < maxPercent;
+                    }
+                });
+                
+                console.log('Found students:', sliceStudents.length);
+                
+                if (sliceStudents.length === 0) {
+                    hideExportLoading();
+                    showNotification('لا توجد بيانات طلاب في هذه الشريحة', 'warning');
+                    return;
+                }
+                
+                // Get sheet name
+                let sheetName;
+                switch(currentSheet) {
+                    case 'science':
+                        sheetName = 'الثاني علمي';
+                        break;
+                    case 'literary':
+                        sheetName = 'الثاني أدبي';
+                        break;
+                    case 'grade1':
+                        sheetName = 'الأول الثانوي';
+                        break;
+                    default:
+                        sheetName = 'الثاني علمي';
+                }
+                
+                // Format date in Arabic numerals
+                const today = new Date();
+                const day = today.getDate();
+                const month = today.getMonth() + 1;
+                const year = today.getFullYear();
+                const weekdays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+                const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+                const weekday = weekdays[today.getDay()];
+                const monthName = months[today.getMonth()];
+                const formattedDate = `${weekday}، ${day} ${monthName} ${year}`;
+                
+                // Show preview first
+                const previewElement = document.createElement('div');
+                previewElement.style.cssText = `
+                    width: 210mm;
+                    padding: 20mm;
+                    background: white;
+                    font-family: 'Tahoma', 'Arial', sans-serif;
+                    direction: rtl;
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 10000;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    box-shadow: 0 0 50px rgba(0,0,0,0.3);
+                `;
+                
+                previewElement.innerHTML = `
+                    <div style="text-align: right; margin-bottom: 20px;">
+                        <h3 style="margin: 0 0 5px 0; font-size: 16px; color: #1f2937;">
+                            مدرسة / الدكتور أحمد زويل الثانوية بنات
+                        </h3>
+                        <p style="margin: 0; font-size: 13px; color: #6b7280;">
+                            الفصل الدراسي الأول 2026/2025
+                        </p>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0; padding: 15px; border-bottom: 3px solid #2563eb;">
+                        <h2 style="margin: 0 0 15px 0; font-size: 20px; color: #1f2937;">
+                            قائمة طلاب الشريحة - ${classification}
+                        </h2>
+                        <div style="font-size: 13px; color: #4b5563;">
+                            <p style="margin: 5px 0;"><strong>المادة:</strong> ${subjectName} (${scoreType})</p>
+                            <p style="margin: 5px 0;"><strong>النسبة:</strong> ${range}</p>
+                            <p style="margin: 5px 0;"><strong>الصف:</strong> ${sheetName}</p>
+                            <p style="margin: 5px 0;"><strong>عدد الطلاب:</strong> ${sliceStudents.length} طالب/ة</p>
+                        </div>
+                    </div>
+                    
+                    <table style="width: 100%; border-collapse: collapse; direction: rtl;">
+                        <thead>
+                            <tr style="background-color: #1f2937; color: white;">
+                                <th style="width: 8%; padding: 8px; border: 1px solid #333; text-align: center;">م</th>
+                                <th style="width: 40%; padding: 8px; border: 1px solid #333; text-align: center;">اسم الطالب</th>
+                                <th style="width: 10%; padding: 8px; border: 1px solid #333; text-align: center;">الفصل</th>
+                                <th style="width: 13%; padding: 8px; border: 1px solid #333; text-align: center;">رقم الجلوس</th>
+                                <th style="width: 14%; padding: 8px; border: 1px solid #333; text-align: center;">${scoreType}</th>
+                                <th style="width: 15%; padding: 8px; border: 1px solid #333; text-align: center;">مجموع المادة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${sliceStudents.slice(0, 15).map((student, index) => {
+                                const testScore = Number(student[scoreColumn]) || 0;
+                                const totalScore = Number(student[subject.total]) || 0;
+                                const bgColor = index % 2 === 0 ? '#ffffff' : '#f9fafb';
+                                return `
+                                    <tr style="background-color: ${bgColor};">
+                                        <td style="padding: 6px; border: 1px solid #d1d5db; text-align: center;">${index + 1}</td>
+                                        <td style="padding: 6px; border: 1px solid #d1d5db; text-align: right;">${student[1] || 'غير متوفر'}</td>
+                                        <td style="padding: 6px; border: 1px solid #d1d5db; text-align: center;">${student[3] || '-'}</td>
+                                        <td style="padding: 6px; border: 1px solid #d1d5db; text-align: center;">${student[4] || '-'}</td>
+                                        <td style="padding: 6px; border: 1px solid #d1d5db; text-align: center; font-weight: bold; color: #2563eb;">${testScore}</td>
+                                        <td style="padding: 6px; border: 1px solid #d1d5db; text-align: center;">${totalScore}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                            ${sliceStudents.length > 15 ? `
+                                <tr>
+                                    <td colspan="6" style="padding: 10px; text-align: center; background-color: #f3f4f6; color: #6b7280; font-style: italic;">
+                                        ... وعدد ${sliceStudents.length - 15} طالب/ة آخرين
+                                    </td>
+                                </tr>
+                            ` : ''}
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top: 30px; text-align: center; font-size: 10px; color: #6b7280; border-top: 1px solid #e5e7eb; padding-top: 15px;">
+                        <p style="margin: 0;">تاريخ الإصدار: ${formattedDate}</p>
+                    </div>
+                `;
+                
+                document.body.appendChild(previewElement);
+                
+                console.log('Preview shown, waiting...');
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                document.body.removeChild(previewElement);
+                console.log('Preview removed, starting PDF generation...');
+                
+                // Create PDF with jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4',
+                    compress: true
+                });
+                
+                const pageWidth = 210;
+                const pageHeight = 297;
+                const margin = 15;
+                const rowHeight = 8;
+                const headerHeight = 60;
+                const footerHeight = 15;
+                const tableHeaderHeight = 10;
+                
+                let currentPage = 1;
+                let currentY = margin;
+                
+                // Function to add header to page
+                function addHeader() {
+                    currentY = margin;
+                    
+                    const headerDiv = document.createElement('div');
+                    headerDiv.style.cssText = `
+                        width: 180mm;
+                        padding: 10px;
+                        background: white;
+                        font-family: 'Tahoma', 'Arial', sans-serif;
+                        direction: rtl;
+                        position: absolute;
+                        top: -10000px;
+                    `;
+                    
+                    headerDiv.innerHTML = `
+                        <div style="text-align: right; margin-bottom: 15px;">
+                            <h3 style="margin: 0 0 5px 0; font-size: 16px; color: #1f2937;">
+                                مدرسة / الدكتور أحمد زويل الثانوية بنات
+                            </h3>
+                            <p style="margin: 0; font-size: 13px; color: #6b7280;">
+                                الفصل الدراسي الأول 2026/2025
+                            </p>
+                        </div>
+                        
+                        <div style="text-align: center; padding: 10px; border-bottom: 3px solid #2563eb;">
+                            <h2 style="margin: 0 0 10px 0; font-size: 18px; color: #1f2937;">
+                                قائمة طلاب الشريحة - ${classification}
+                            </h2>
+                            <div style="font-size: 12px; color: #4b5563;">
+                                <p style="margin: 3px 0;"><strong>المادة:</strong> ${subjectName} (${scoreType}) | <strong>النسبة:</strong> ${range} | <strong>الصف:</strong> ${sheetName}</p>
+                                <p style="margin: 3px 0;"><strong>عدد الطلاب:</strong> ${sliceStudents.length} طالب/ة | <strong>الصفحة:</strong> ${currentPage}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    return headerDiv;
+                }
+                
+                // Function to add table header
+                function addTableHeader() {
+                    const tableHeaderDiv = document.createElement('div');
+                    tableHeaderDiv.style.cssText = `
+                        width: 180mm;
+                        background: white;
+                        font-family: 'Tahoma', 'Arial', sans-serif;
+                        direction: rtl;
+                        position: absolute;
+                        top: -10000px;
+                    `;
+                    
+                    tableHeaderDiv.innerHTML = `
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #1f2937; color: white;">
+                                    <th style="width: 8%; padding: 8px; border: 1px solid #333; text-align: center; font-size: 11px;">م</th>
+                                    <th style="width: 40%; padding: 8px; border: 1px solid #333; text-align: center; font-size: 11px;">اسم الطالب</th>
+                                    <th style="width: 10%; padding: 8px; border: 1px solid #333; text-align: center; font-size: 11px;">الفصل</th>
+                                    <th style="width: 13%; padding: 8px; border: 1px solid #333; text-align: center; font-size: 11px;">رقم الجلوس</th>
+                                    <th style="width: 14%; padding: 8px; border: 1px solid #333; text-align: center; font-size: 11px;">${scoreType}</th>
+                                    <th style="width: 15%; padding: 8px; border: 1px solid #333; text-align: center; font-size: 11px;">مجموع المادة</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    `;
+                    
+                    return tableHeaderDiv;
+                }
+                
+                // Function to capture element as image
+                async function captureElement(element) {
+                    document.body.appendChild(element);
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    const canvas = await html2canvas(element, {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#ffffff'
+                    });
+                    
+                    document.body.removeChild(element);
+                    return canvas;
+                }
+                
+                // Calculate rows per page
+                const availableHeight = pageHeight - headerHeight - tableHeaderHeight - footerHeight - (2 * margin);
+                const rowsPerPage = Math.floor(availableHeight / rowHeight);
+                
+                console.log(`Rows per page: ${rowsPerPage}, Total students: ${sliceStudents.length}, Total pages: ${Math.ceil(sliceStudents.length / rowsPerPage)}`);
+                
+                // Split students into pages
+                for (let pageIndex = 0; pageIndex < Math.ceil(sliceStudents.length / rowsPerPage); pageIndex++) {
+                    currentPage = pageIndex + 1;
+                    
+                    if (pageIndex > 0) {
+                        pdf.addPage();
+                    }
+                    
+                    currentY = margin;
+                    
+                    // Add header
+                    const headerDiv = addHeader();
+                    const headerCanvas = await captureElement(headerDiv);
+                    const headerImgData = headerCanvas.toDataURL('image/jpeg', 1.0);
+                    const headerImgHeight = (headerCanvas.height * (pageWidth - 2 * margin)) / headerCanvas.width;
+                    
+                    pdf.addImage(headerImgData, 'JPEG', margin, currentY, pageWidth - 2 * margin, headerImgHeight, '', 'FAST');
+                    currentY += headerImgHeight + 3;
+                    
+                    // Add table header
+                    const tableHeaderDiv = addTableHeader();
+                    const tableHeaderCanvas = await captureElement(tableHeaderDiv);
+                    const tableHeaderImgData = tableHeaderCanvas.toDataURL('image/jpeg', 1.0);
+                    const tableHeaderImgHeight = (tableHeaderCanvas.height * (pageWidth - 2 * margin)) / tableHeaderCanvas.width;
+                    
+                    pdf.addImage(tableHeaderImgData, 'JPEG', margin, currentY, pageWidth - 2 * margin, tableHeaderImgHeight, '', 'FAST');
+                    currentY += tableHeaderImgHeight;
+                    
+                    // Add rows for this page
+                    const startIdx = pageIndex * rowsPerPage;
+                    const endIdx = Math.min((pageIndex + 1) * rowsPerPage, sliceStudents.length);
+                    const pageStudents = sliceStudents.slice(startIdx, endIdx);
+                    
+                    // Create table body
+                    const tableBodyDiv = document.createElement('div');
+                    tableBodyDiv.style.cssText = `
+                        width: 180mm;
+                        background: white;
+                        font-family: 'Tahoma', 'Arial', sans-serif;
+                        direction: rtl;
+                        position: absolute;
+                        top: -10000px;
+                    `;
+                    
+                    let tableBodyHTML = '<table style="width: 100%; border-collapse: collapse;"><tbody>';
+                    
+                    pageStudents.forEach((student, index) => {
+                        const globalIndex = startIdx + index;
+                        const testScore = Number(student[scoreColumn]) || 0;
+                        const totalScore = Number(student[subject.total]) || 0;
+                        const bgColor = index % 2 === 0 ? '#ffffff' : '#f9fafb';
+                        
+                        tableBodyHTML += `
+                            <tr style="background-color: ${bgColor};">
+                                <td style="width: 8%; padding: 6px; border: 1px solid #d1d5db; text-align: center; font-size: 10px;">${globalIndex + 1}</td>
+                                <td style="width: 40%; padding: 6px; border: 1px solid #d1d5db; text-align: right; font-size: 10px;">${student[1] || 'غير متوفر'}</td>
+                                <td style="width: 10%; padding: 6px; border: 1px solid #d1d5db; text-align: center; font-size: 10px;">${student[3] || '-'}</td>
+                                <td style="width: 13%; padding: 6px; border: 1px solid #d1d5db; text-align: center; font-size: 10px;">${student[4] || '-'}</td>
+                                <td style="width: 14%; padding: 6px; border: 1px solid #d1d5db; text-align: center; font-weight: bold; color: #2563eb; font-size: 10px;">${testScore}</td>
+                                <td style="width: 15%; padding: 6px; border: 1px solid #d1d5db; text-align: center; font-size: 10px;">${totalScore}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableBodyHTML += '</tbody></table>';
+                    tableBodyDiv.innerHTML = tableBodyHTML;
+                    
+                    const tableBodyCanvas = await captureElement(tableBodyDiv);
+                    const tableBodyImgData = tableBodyCanvas.toDataURL('image/jpeg', 1.0);
+                    const tableBodyImgHeight = (tableBodyCanvas.height * (pageWidth - 2 * margin)) / tableBodyCanvas.width;
+                    
+                    pdf.addImage(tableBodyImgData, 'JPEG', margin, currentY, pageWidth - 2 * margin, tableBodyImgHeight, '', 'FAST');
+                    currentY += tableBodyImgHeight + 5;
+                    
+                    // Add footer with Arabic date
+                    const footerDiv = document.createElement('div');
+                    footerDiv.style.cssText = `
+                        width: 180mm;
+                        background: white;
+                        font-family: 'Tahoma', 'Arial', sans-serif;
+                        direction: rtl;
+                        position: absolute;
+                        top: -10000px;
+                        text-align: center;
+                        font-size: 10px;
+                        color: #6b7280;
+                        padding: 10px;
+                    `;
+                    footerDiv.innerHTML = `<p style="margin: 0;">تاريخ الإصدار: ${formattedDate}</p>`;
+                    
+                    const footerCanvas = await captureElement(footerDiv);
+                    const footerImgData = footerCanvas.toDataURL('image/jpeg', 1.0);
+                    const footerImgHeight = (footerCanvas.height * (pageWidth - 2 * margin)) / footerCanvas.width;
+                    
+                    pdf.addImage(footerImgData, 'JPEG', margin, pageHeight - margin - footerImgHeight, pageWidth - 2 * margin, footerImgHeight, '', 'FAST');
+                    
+                    console.log(`Page ${currentPage} completed with ${pageStudents.length} students`);
+                }
+                
+                // Save the PDF
+                const filename = `شريحة_${classification}_${subjectName}_${Date.now()}.pdf`;
+                pdf.save(filename);
+                
+                console.log('PDF saved successfully!');
+                
+                hideExportLoading();
+                showNotification(`تم تصدير قائمة ${sliceStudents.length} طالب/ة بنجاح في ${currentPage} صفحة`, 'success');
+                
+            } catch (error) {
+                console.error('Error details:', error);
+                hideExportLoading();
+                showNotification('حدث خطأ أثناء التصدير: ' + error.message, 'error');
+            }
+        }
+        
+        // Initialize subject chart when page loads
+        window.addEventListener('load', function() {
+            // Set initial titles
+            const sheetTitle = 'الصف الثاني علمي';
+            currentSheetTitle.textContent = sheetTitle;
+            chartSheetTitle.textContent = sheetTitle;
+            topSheetTitle.textContent = sheetTitle;
+            infoSheetTitle.textContent = sheetTitle;
+            
+            // Initialize charts
+            if (Object.keys(getCurrentSubjects()).length > 0) {
+                setTimeout(renderSubjectChart, 500);
+                setTimeout(renderSlices, 500);
+            }
+        });
+        
+function openOnlineReport(){
+   window.open(
+     "PUT_GITHUB_LINK_HERE",
+     "_blank"
+   );
+}
+
+
+        
+    </script>
+</body>
+</html>
