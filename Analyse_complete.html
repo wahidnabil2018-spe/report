@@ -2974,7 +2974,6 @@
     document.getElementById("exportLoading").style.display = "none";
   })
   .catch(err => {
-    alert("جهازك لا يدعم إنشاء PDF داخل التطبيق");
     console.error(err);
     document.getElementById("exportLoading").style.display = "none";
   });
@@ -3563,30 +3562,17 @@ function smartExportPDF(){
 
 function mainExportPDF(){
 
-   // لو الصفحة مفتوحة من المتصفح
    if (location.protocol === "https:") {
-
-       // تصدير كل الطلاب
-       exportSliceStudentsToPDF(
-         "all",
-         "total",
-         0,
-         100,
-         "كل الطلاب",
-         "0% - 100%"
-       );
-
+       exportToPDF();
    } else {
-
-       // داخل التطبيق
        window.open(
          "https://wahidnabil2018-spe.github.io/report/Analyse_complete.html",
          "_blank"
        );
-
    }
 
 }
+
 
 
         
