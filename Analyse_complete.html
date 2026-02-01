@@ -1406,7 +1406,7 @@
                 <!-- Export Options Cards -->
                 <div class="export-options">
                     <!-- PDF Export -->
-<div class="export-card pdf" onclick="smartExportPDF()">
+<div class="export-card pdf" onclick="mainExportPDF()">
                         <div class="export-icon pdf">
                             <i class="fas fa-file-pdf"></i>
                         </div>
@@ -3561,6 +3561,32 @@ function smartExportPDF(){
 
 }
 
+function mainExportPDF(){
+
+   // لو الصفحة مفتوحة من المتصفح
+   if (location.protocol === "https:") {
+
+       // تصدير كل الطلاب
+       exportSliceStudentsToPDF(
+         "all",
+         "total",
+         0,
+         100,
+         "كل الطلاب",
+         "0% - 100%"
+       );
+
+   } else {
+
+       // داخل التطبيق
+       window.open(
+         "https://wahidnabil2018-spe.github.io/report/Analyse_complete.html",
+         "_blank"
+       );
+
+   }
+
+}
 
 
         
