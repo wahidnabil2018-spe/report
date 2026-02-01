@@ -2967,7 +2967,46 @@
                     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
                 };
                 
-                await html2pdf().set(options).from(clone).save();
+                // Generate PDF as blob for better compatibility
+                const pdfBlob = await html2pdf().set(options).from(clone).output('blob');
+                
+                // Try multiple download methods for maximum compatibility
+                const filename = 'تقرير_التحليل_' + Date.now() + '.pdf';
+                
+                // Method 1: Using anchor element with download attribute
+                try {
+                    const url = URL.createObjectURL(pdfBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    link.style.display = 'none';
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                } catch (e1) {
+                    console.error('Method 1 failed:', e1);
+                    
+                    // Method 2: Using FileSaver.js if available
+                    try {
+                        if (typeof saveAs !== 'undefined') {
+                            saveAs(pdfBlob, filename);
+                        } else {
+                            throw new Error('FileSaver not available');
+                        }
+                    } catch (e2) {
+                        console.error('Method 2 failed:', e2);
+                        
+                        // Method 3: Open in new window
+                        const url = URL.createObjectURL(pdfBlob);
+                        window.open(url, '_blank');
+                        setTimeout(() => URL.revokeObjectURL(url), 1000);
+                    }
+                }
                 
                 document.body.removeChild(clone);
                 
@@ -3513,11 +3552,60 @@
                     console.log(`Page ${currentPage} completed with ${pageStudents.length} students`);
                 }
                 
-                // Save the PDF
+                // Save the PDF with better compatibility for embedded apps
                 const filename = `شريحة_${classification}_${subjectName}_${Date.now()}.pdf`;
-                pdf.save(filename);
                 
-                console.log('PDF saved successfully!');
+                // Create blob from PDF
+                const pdfBlob = pdf.output('blob');
+                
+                // Try multiple download methods for maximum compatibility
+                try {
+                    // Method 1: Using anchor element with download attribute
+                    const url = URL.createObjectURL(pdfBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    link.style.display = 'none';
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                    
+                    console.log('PDF downloaded using Method 1 (anchor download)');
+                } catch (e1) {
+                    console.error('Method 1 failed:', e1);
+                    
+                    try {
+                        // Method 2: Using FileSaver.js if available
+                        if (typeof saveAs !== 'undefined') {
+                            saveAs(pdfBlob, filename);
+                            console.log('PDF downloaded using Method 2 (FileSaver)');
+                        } else {
+                            throw new Error('FileSaver not available');
+                        }
+                    } catch (e2) {
+                        console.error('Method 2 failed:', e2);
+                        
+                        // Method 3: Open in new window/tab
+                        const url = URL.createObjectURL(pdfBlob);
+                        const newWindow = window.open(url, '_blank');
+                        
+                        if (newWindow) {
+                            console.log('PDF opened in new window (Method 3)');
+                            setTimeout(() => URL.revokeObjectURL(url), 1000);
+                        } else {
+                            // Method 4: Fallback - show URL in alert
+                            alert('يرجى السماح بفتح النوافذ المنبثقة لتنزيل الملف، أو انقر بزر الماوس الأيمن على الرابط التالي واختر "حفظ باسم":\n\n' + url);
+                            console.log('PDF URL created (Method 4):', url);
+                        }
+                    }
+                }
+                
+                console.log('PDF processing completed successfully!');
                 
                 hideExportLoading();
                 showNotification(`تم تصدير قائمة ${sliceStudents.length} طالب/ة بنجاح في ${currentPage} صفحة`, 'success');
