@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- HTML2PDF for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <!-- html2canvas for capturing HTML -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1406,7 +1407,7 @@
                 <!-- Export Options Cards -->
                 <div class="export-options">
                     <!-- PDF Export -->
-<div class="export-card pdf" onclick="mainExportPDF()">
+                    <div class="export-card pdf" onclick="exportToPDF()">
                         <div class="export-icon pdf">
                             <i class="fas fa-file-pdf"></i>
                         </div>
@@ -2934,52 +2935,51 @@
         }
         
         // Export to PDF
-     function exportToPDF() {
-
-  const element = document.getElementById("pdfArea");
-
-  document.getElementById("exportLoading").style.display = "flex";
-
-  html2canvas(element, {
-    scale: 1,
-    useCORS: true
-  }).then(canvas => {
-
-    const imgData = canvas.toDataURL("image/jpeg", 0.9);
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "a4");
-
-    const pageWidth = 210;
-    const pageHeight = 297;
-
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let heightLeft = imgHeight;
-    let position = 0;
-
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-
-    pdf.save("report.pdf");
-
-    document.getElementById("exportLoading").style.display = "none";
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById("exportLoading").style.display = "none";
-  });
-
-}
-
+        async function exportToPDF() {
+            showExportLoading('جاري تحضير تقرير PDF...');
+            
+            try {
+                // Generate preview content first
+                generatePreview();
+                
+                const source = document.getElementById("previewContent");
+                
+                // إنشاء نسخة نظيفة للتصدير
+                const clone = source.cloneNode(true);
+                
+                clone.style.display = "block";
+                clone.style.position = "static";
+                clone.style.width = "100%";
+                clone.style.maxHeight = "none";
+                
+                // إزالة أي عناصر مخفية
+                clone.querySelectorAll('[style*="display:none"]').forEach(el => {
+                    el.style.display = "block";
+                });
+                
+                document.body.appendChild(clone);
+                
+                const options = {
+                    margin: 10,
+                    filename: "report.pdf",
+                    image: { type: "jpeg", quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+                };
+                
+                await html2pdf().set(options).from(clone).save();
+                
+                document.body.removeChild(clone);
+                
+                hideExportLoading();
+                showNotification("تم تصدير التقرير إلى PDF بنجاح", "success");
+                
+            } catch (err) {
+                console.error(err);
+                hideExportLoading();
+                showNotification("حدث خطأ أثناء تصدير PDF", "error");
+            }
+        }
         
         // Export to Excel
         async function exportToExcel() {
@@ -3544,25 +3544,6 @@
                 setTimeout(renderSlices, 500);
             }
         });
-        
-
-
-function mainExportPDF(){
-
-   if (location.protocol === "https:") {
-       exportToPDF();
-   } else {
-       window.open(
-         "https://wahidnabil2018-spe.github.io/report/Analyse_complete.html",
-         "_blank"
-       );
-   }
-
-}
-
-
-
-        
     </script>
 </body>
 </html>
