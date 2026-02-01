@@ -603,6 +603,138 @@
             cursor: pointer;
         }
         
+        /* PDF Viewer Modal */
+        .pdf-viewer-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pdf-viewer-modal.active {
+            display: flex;
+        }
+        
+        .pdf-viewer-content {
+            background: white;
+            width: 95%;
+            max-width: 900px;
+            height: 90%;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .pdf-viewer-header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .pdf-viewer-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pdf-viewer-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .pdf-viewer-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .pdf-viewer-btn.download {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .pdf-viewer-btn.download:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+        }
+        
+        .pdf-viewer-btn.close {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .pdf-viewer-btn.close:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .pdf-viewer-body {
+            flex: 1;
+            overflow: auto;
+            padding: 1.5rem;
+            background: #f8fafc;
+        }
+        
+        .pdf-viewer-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pdf-preview-images {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .pdf-preview-page {
+            max-width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .pdf-loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+        
+        .pdf-loading i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         /* Export Preview */
         .export-preview {
             background-color: white;
@@ -1504,6 +1636,34 @@
         </div>
     </div>
     
+    <!-- PDF Viewer Modal -->
+    <div class="pdf-viewer-modal" id="pdfViewerModal">
+        <div class="pdf-viewer-content">
+            <div class="pdf-viewer-header">
+                <div class="pdf-viewer-title">
+                    <i class="fas fa-file-pdf"></i>
+                    <span id="pdfViewerFileName">معاينة الملف</span>
+                </div>
+                <div class="pdf-viewer-actions">
+                    <button class="pdf-viewer-btn download" id="pdfDownloadBtn">
+                        <i class="fas fa-download"></i>
+                        تنزيل الملف
+                    </button>
+                    <button class="pdf-viewer-btn close" id="pdfViewerClose">
+                        <i class="fas fa-times"></i>
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+            <div class="pdf-viewer-body" id="pdfViewerBody">
+                <div class="pdf-loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>جاري تحميل المعاينة...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Footer -->
     <footer class="footer">
         <div>مدرسة الدكتور أحمد زويل الثانوية بنات Zoweil365 &copy; <span id="currentYear"></span></div>
@@ -1715,6 +1875,366 @@
                 `;
             }
         }
+        
+        // PDF Viewer Functions
+        let currentPdfBlob = null;
+        let currentPdfFilename = '';
+        let currentPdfDataUrl = null;
+        
+        async function showPdfViewer(pdfBlob, filename) {
+            currentPdfBlob = pdfBlob;
+            currentPdfFilename = filename;
+            
+            const modal = document.getElementById('pdfViewerModal');
+            const body = document.getElementById('pdfViewerBody');
+            const fileNameElement = document.getElementById('pdfViewerFileName');
+            
+            // Set filename
+            fileNameElement.textContent = filename;
+            
+            // Show modal
+            modal.classList.add('active');
+            
+            // Show loading
+            body.innerHTML = `
+                <div class="pdf-loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>جاري تحضير الملف...</p>
+                </div>
+            `;
+            
+            try {
+                // Convert blob to base64 data URL
+                const reader = new FileReader();
+                currentPdfDataUrl = await new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(pdfBlob);
+                });
+                
+                console.log('PDF converted to data URL, size:', currentPdfDataUrl.length);
+                
+                // Display download options
+                body.innerHTML = `
+                    <div class="pdf-preview-images">
+                        <div style="text-align: center; padding: 2.5rem; background: white; border-radius: 12px; width: 100%; max-width: 700px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                            <i class="fas fa-file-pdf" style="font-size: 6rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+                            <h3 style="margin: 1rem 0; color: var(--secondary); font-size: 1.3rem;">${filename}</h3>
+                            <p style="color: var(--success); margin-bottom: 1rem; font-size: 1.05rem; font-weight: 600;">
+                                <i class="fas fa-check-circle"></i>
+                                تم إنشاء الملف بنجاح!
+                            </p>
+                            
+                            <div style="background: #f0f9ff; border: 2px solid var(--primary); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                                <p style="color: var(--secondary); margin-bottom: 1rem; font-weight: 600; font-size: 1.1rem;">
+                                    <i class="fas fa-download"></i>
+                                    خيارات الحصول على الملف:
+                                </p>
+                                
+                                <!-- Option 1: Direct link -->
+                                <div style="margin: 1rem 0; padding: 1rem; background: white; border-radius: 6px;">
+                                    <p style="font-weight: 600; color: var(--secondary); margin-bottom: 0.5rem;">
+                                        الطريقة 1: رابط مباشر
+                                    </p>
+                                    <a href="${currentPdfDataUrl}" download="${filename}" style="
+                                        display: inline-block;
+                                        background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+                                        color: white;
+                                        border: none;
+                                        padding: 0.8rem 2rem;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                        text-decoration: none;
+                                        margin-top: 0.5rem;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        <i class="fas fa-download"></i> اضغط هنا للتنزيل
+                                    </a>
+                                </div>
+                                
+                                <!-- Option 2: Open in new tab -->
+                                <div style="margin: 1rem 0; padding: 1rem; background: white; border-radius: 6px;">
+                                    <p style="font-weight: 600; color: var(--secondary); margin-bottom: 0.5rem;">
+                                        الطريقة 2: فتح في نافذة جديدة
+                                    </p>
+                                    <button onclick="window.open('${currentPdfDataUrl}', '_blank')" style="
+                                        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+                                        color: white;
+                                        border: none;
+                                        padding: 0.8rem 2rem;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        <i class="fas fa-external-link-alt"></i> فتح في نافذة جديدة
+                                    </button>
+                                </div>
+                                
+                                <!-- Option 3: Share if available -->
+                                ${navigator.share ? `
+                                <div style="margin: 1rem 0; padding: 1rem; background: white; border-radius: 6px;">
+                                    <p style="font-weight: 600; color: var(--secondary); margin-bottom: 0.5rem;">
+                                        الطريقة 3: مشاركة الملف
+                                    </p>
+                                    <button onclick="sharePdf()" style="
+                                        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+                                        color: white;
+                                        border: none;
+                                        padding: 0.8rem 2rem;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        <i class="fas fa-share-alt"></i> مشاركة الملف
+                                    </button>
+                                </div>
+                                ` : ''}
+                            </div>
+                            
+                            <p style="font-size: 0.9rem; color: var(--gray); margin-top: 1rem; line-height: 1.6;">
+                                <i class="fas fa-info-circle"></i>
+                                إذا لم تعمل أي طريقة، قد تحتاج إلى تفعيل إذن التنزيلات في إعدادات التطبيق
+                            </p>
+                            
+                            <!-- File info -->
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: #f9fafb; border-radius: 6px; font-size: 0.85rem; color: var(--gray);">
+                                <p style="margin: 0;"><strong>حجم الملف:</strong> ${(pdfBlob.size / 1024).toFixed(2)} KB</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                console.log('PDF viewer displayed successfully');
+                
+            } catch (error) {
+                console.error('Error displaying PDF:', error);
+                body.innerHTML = `
+                    <div class="pdf-loading">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+                        <p>حدث خطأ في تحضير الملف</p>
+                        <p style="font-size: 0.9rem; color: var(--gray); margin-top: 1rem;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        async function sharePdf() {
+            if (!currentPdfBlob || !currentPdfFilename) {
+                showNotification('لا يوجد ملف للمشاركة', 'error');
+                return;
+            }
+            
+            try {
+                const file = new File([currentPdfBlob], currentPdfFilename, { type: 'application/pdf' });
+                
+                if (navigator.share) {
+                    await navigator.share({
+                        files: [file],
+                        title: currentPdfFilename,
+                        text: 'تقرير PDF من Zoweil365'
+                    });
+                    console.log('PDF shared successfully');
+                    showNotification('تمت المشاركة بنجاح', 'success');
+                } else {
+                    showNotification('المشاركة غير مدعومة في هذا المتصفح', 'warning');
+                }
+            } catch (error) {
+                console.error('Share error:', error);
+                if (error.name !== 'AbortError') {
+                    showNotification('حدث خطأ في المشاركة', 'error');
+                }
+            }
+        }
+        
+        function closePdfViewer() {
+            const modal = document.getElementById('pdfViewerModal');
+            const body = document.getElementById('pdfViewerBody');
+            
+            // Clear content
+            body.innerHTML = `
+                <div class="pdf-loading">
+                    <i class="fas fa-spinner"></i>
+                    <p>جاري تحميل المعاينة...</p>
+                </div>
+            `;
+            
+            modal.classList.remove('active');
+            currentPdfBlob = null;
+            currentPdfFilename = '';
+            currentPdfDataUrl = null;
+            
+            console.log('PDF viewer closed');
+        }
+        
+        function downloadPdfFromViewer() {
+            if (!currentPdfBlob || !currentPdfFilename) {
+                showNotification('لا يوجد ملف للتنزيل', 'error');
+                console.error('No PDF blob or filename available');
+                return;
+            }
+            
+            console.log('Starting download process for:', currentPdfFilename);
+            console.log('Blob size:', currentPdfBlob.size, 'bytes');
+            console.log('Blob type:', currentPdfBlob.type);
+            
+            // Method 1: Standard download using anchor element
+            try {
+                console.log('Trying Method 1: Anchor element download');
+                
+                const url = URL.createObjectURL(currentPdfBlob);
+                console.log('Created blob URL:', url);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = currentPdfFilename;
+                link.target = '_blank'; // Added for better compatibility
+                link.rel = 'noopener noreferrer';
+                
+                // Make visible for debugging (some environments require this)
+                link.style.position = 'fixed';
+                link.style.top = '-9999px';
+                link.style.left = '-9999px';
+                
+                // Append to body (required for Firefox and some mobile browsers)
+                document.body.appendChild(link);
+                console.log('Link appended to body');
+                
+                // Trigger click
+                link.click();
+                console.log('Click triggered on download link');
+                
+                // Cleanup after a delay
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    console.log('Cleanup completed');
+                }, 500);
+                
+                showNotification('تم بدء التنزيل - تحقق من مجلد التنزيلات', 'success');
+                console.log('Method 1: Download initiated successfully');
+                return;
+                
+            } catch (error) {
+                console.error('Method 1 failed:', error);
+            }
+            
+            // Method 2: Try opening in new window/tab
+            try {
+                console.log('Trying Method 2: Open in new window');
+                
+                const url = URL.createObjectURL(currentPdfBlob);
+                const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+                
+                if (newWindow) {
+                    console.log('Method 2: Opened in new window successfully');
+                    showNotification('تم فتح الملف في نافذة جديدة - احفظه من هناك', 'success');
+                    setTimeout(() => URL.revokeObjectURL(url), 1000);
+                    return;
+                } else {
+                    throw new Error('Popup blocked or failed');
+                }
+                
+            } catch (error) {
+                console.error('Method 2 failed:', error);
+            }
+            
+            // Method 3: Try FileSaver.js if available
+            try {
+                console.log('Trying Method 3: FileSaver.js');
+                
+                if (typeof saveAs !== 'undefined') {
+                    saveAs(currentPdfBlob, currentPdfFilename);
+                    console.log('Method 3: FileSaver.js download initiated');
+                    showNotification('تم بدء التنزيل باستخدام FileSaver', 'success');
+                    return;
+                } else {
+                    throw new Error('FileSaver not available');
+                }
+                
+            } catch (error) {
+                console.error('Method 3 failed:', error);
+            }
+            
+            // Method 4: Create a data URL and try downloading
+            try {
+                console.log('Trying Method 4: Data URL download');
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const link = document.createElement('a');
+                    link.href = e.target.result;
+                    link.download = currentPdfFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    console.log('Method 4: Data URL download initiated');
+                    showNotification('تم بدء التنزيل', 'success');
+                };
+                reader.onerror = function(error) {
+                    console.error('FileReader error:', error);
+                    throw error;
+                };
+                reader.readAsDataURL(currentPdfBlob);
+                return;
+                
+            } catch (error) {
+                console.error('Method 4 failed:', error);
+            }
+            
+            // All methods failed
+            console.error('All download methods failed');
+            showNotification('حدث خطأ في التنزيل. يرجى تجربة متصفح آخر أو السماح بالتنزيلات في إعدادات التطبيق', 'error');
+            
+            // Show detailed error info in console
+            console.log('=== Download Failed - Debug Info ===');
+            console.log('User Agent:', navigator.userAgent);
+            console.log('Platform:', navigator.platform);
+            console.log('Blob info:', {
+                size: currentPdfBlob.size,
+                type: currentPdfBlob.type
+            });
+        }
+        
+        // Setup PDF viewer event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeBtn = document.getElementById('pdfViewerClose');
+            const downloadBtn = document.getElementById('pdfDownloadBtn');
+            const modal = document.getElementById('pdfViewerModal');
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closePdfViewer);
+            }
+            
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function() {
+                    if (currentPdfDataUrl) {
+                        // Open PDF in new window
+                        window.open(currentPdfDataUrl, '_blank');
+                        showNotification('تم فتح الملف في نافذة جديدة', 'success');
+                    } else {
+                        showNotification('لا يوجد ملف متاح', 'error');
+                    }
+                });
+            }
+            
+            // Close on background click
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closePdfViewer();
+                    }
+                });
+            }
+            
+            // Close on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closePdfViewer();
+                }
+            });
+        });
         
         // Switch between sheets
         function switchSheet(sheetType) {
@@ -2967,51 +3487,18 @@
                     jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
                 };
                 
-                // Generate PDF as blob for better compatibility
+                // Generate PDF as blob
                 const pdfBlob = await html2pdf().set(options).from(clone).output('blob');
-                
-                // Try multiple download methods for maximum compatibility
                 const filename = 'تقرير_التحليل_' + Date.now() + '.pdf';
-                
-                // Method 1: Using anchor element with download attribute
-                try {
-                    const url = URL.createObjectURL(pdfBlob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = filename;
-                    link.style.display = 'none';
-                    
-                    document.body.appendChild(link);
-                    link.click();
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(link);
-                        URL.revokeObjectURL(url);
-                    }, 100);
-                } catch (e1) {
-                    console.error('Method 1 failed:', e1);
-                    
-                    // Method 2: Using FileSaver.js if available
-                    try {
-                        if (typeof saveAs !== 'undefined') {
-                            saveAs(pdfBlob, filename);
-                        } else {
-                            throw new Error('FileSaver not available');
-                        }
-                    } catch (e2) {
-                        console.error('Method 2 failed:', e2);
-                        
-                        // Method 3: Open in new window
-                        const url = URL.createObjectURL(pdfBlob);
-                        window.open(url, '_blank');
-                        setTimeout(() => URL.revokeObjectURL(url), 1000);
-                    }
-                }
                 
                 document.body.removeChild(clone);
                 
                 hideExportLoading();
-                showNotification("تم تصدير التقرير إلى PDF بنجاح", "success");
+                
+                // Show PDF in viewer modal instead of direct download
+                showPdfViewer(pdfBlob, filename);
+                
+                showNotification("تم تجهيز التقرير بنجاح! يمكنك الآن معاينته أو تنزيله", "success");
                 
             } catch (err) {
                 console.error(err);
@@ -3558,57 +4045,14 @@
                 // Create blob from PDF
                 const pdfBlob = pdf.output('blob');
                 
-                // Try multiple download methods for maximum compatibility
-                try {
-                    // Method 1: Using anchor element with download attribute
-                    const url = URL.createObjectURL(pdfBlob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = filename;
-                    link.style.display = 'none';
-                    
-                    document.body.appendChild(link);
-                    link.click();
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(link);
-                        URL.revokeObjectURL(url);
-                    }, 100);
-                    
-                    console.log('PDF downloaded using Method 1 (anchor download)');
-                } catch (e1) {
-                    console.error('Method 1 failed:', e1);
-                    
-                    try {
-                        // Method 2: Using FileSaver.js if available
-                        if (typeof saveAs !== 'undefined') {
-                            saveAs(pdfBlob, filename);
-                            console.log('PDF downloaded using Method 2 (FileSaver)');
-                        } else {
-                            throw new Error('FileSaver not available');
-                        }
-                    } catch (e2) {
-                        console.error('Method 2 failed:', e2);
-                        
-                        // Method 3: Open in new window/tab
-                        const url = URL.createObjectURL(pdfBlob);
-                        const newWindow = window.open(url, '_blank');
-                        
-                        if (newWindow) {
-                            console.log('PDF opened in new window (Method 3)');
-                            setTimeout(() => URL.revokeObjectURL(url), 1000);
-                        } else {
-                            // Method 4: Fallback - show URL in alert
-                            alert('يرجى السماح بفتح النوافذ المنبثقة لتنزيل الملف، أو انقر بزر الماوس الأيمن على الرابط التالي واختر "حفظ باسم":\n\n' + url);
-                            console.log('PDF URL created (Method 4):', url);
-                        }
-                    }
-                }
-                
                 console.log('PDF processing completed successfully!');
                 
                 hideExportLoading();
-                showNotification(`تم تصدير قائمة ${sliceStudents.length} طالب/ة بنجاح في ${currentPage} صفحة`, 'success');
+                
+                // Show PDF in viewer modal instead of direct download
+                showPdfViewer(pdfBlob, filename);
+                
+                showNotification(`تم تجهيز قائمة ${sliceStudents.length} طالب/ة بنجاح في ${currentPage} صفحة! يمكنك الآن معاينتها أو تنزيلها`, 'success');
                 
             } catch (error) {
                 console.error('Error details:', error);
