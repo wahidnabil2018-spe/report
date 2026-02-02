@@ -18,6 +18,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     
+    <!-- PDF.js for rendering PDF as images -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
     <!-- Arabic Font Support for jsPDF -->
     <script src="https://cdn.jsdelivr.net/npm/jspdf-arabic@1.0.1/dist/jspdf.plugin.arabic.min.js"></script>
     
@@ -1991,11 +1994,33 @@
                                     </button>
                                 </div>
                                 ` : ''}
+                                
+                                <!-- Option 4: Copy data link -->
+                                <div style="margin: 1rem 0; padding: 1rem; background: white; border-radius: 6px;">
+                                    <p style="font-weight: 600; color: var(--secondary); margin-bottom: 0.5rem;">
+                                        ${navigator.share ? 'الطريقة 4' : 'الطريقة 3'}: نسخ رابط البيانات
+                                    </p>
+                                    <button onclick="copyDataUrlToClipboard()" style="
+                                        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                                        color: white;
+                                        border: none;
+                                        padding: 0.8rem 2rem;
+                                        border-radius: 6px;
+                                        font-weight: 600;
+                                        cursor: pointer;
+                                        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        <i class="fas fa-copy"></i> نسخ رابط البيانات
+                                    </button>
+                                    <p style="font-size: 0.8rem; color: var(--gray); margin-top: 0.5rem;">
+                                        يمكنك لصق الرابط في متصفح خارجي
+                                    </p>
+                                </div>
                             </div>
                             
                             <p style="font-size: 0.9rem; color: var(--gray); margin-top: 1rem; line-height: 1.6;">
                                 <i class="fas fa-info-circle"></i>
-                                إذا لم تعمل أي طريقة، قد تحتاج إلى تفعيل إذن التنزيلات في إعدادات التطبيق
+                                إذا لم تعمل أي طريقة، جرب فتح Console (F12) وتحقق من الأخطاء
                             </p>
                             
                             <!-- File info -->
@@ -2048,6 +2073,38 @@
             }
         }
         
+        async function copyDataUrlToClipboard() {
+            if (!currentPdfDataUrl) {
+                showNotification('رابط البيانات غير متوفر', 'error');
+                return;
+            }
+            
+            try {
+                // Try using Clipboard API
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(currentPdfDataUrl);
+                    showNotification('تم نسخ رابط البيانات! الصقه في شريط عنوان المتصفح', 'success');
+                    console.log('Data URL copied to clipboard');
+                } else {
+                    // Fallback: Create a text area and copy
+                    const textArea = document.createElement('textarea');
+                    textArea.value = currentPdfDataUrl;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-9999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showNotification('تم نسخ رابط البيانات! الصقه في شريط عنوان المتصفح', 'success');
+                    console.log('Data URL copied using fallback method');
+                }
+            } catch (error) {
+                console.error('Copy error:', error);
+                // Show the data URL in an alert as last resort
+                alert('انسخ الرابط التالي والصقه في شريط عنوان المتصفح:\n\n' + currentPdfDataUrl.substring(0, 100) + '...');
+            }
+        }
+        
         function closePdfViewer() {
             const modal = document.getElementById('pdfViewerModal');
             const body = document.getElementById('pdfViewerBody');
@@ -2078,6 +2135,10 @@
             console.log('Starting download process for:', currentPdfFilename);
             console.log('Blob size:', currentPdfBlob.size, 'bytes');
             console.log('Blob type:', currentPdfBlob.type);
+            console.log('User Agent:', navigator.userAgent);
+            console.log('Platform:', navigator.platform);
+            
+            let downloadAttempted = false;
             
             // Method 1: Standard download using anchor element
             try {
@@ -2089,31 +2150,39 @@
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = currentPdfFilename;
-                link.target = '_blank'; // Added for better compatibility
+                link.target = '_blank';
                 link.rel = 'noopener noreferrer';
                 
-                // Make visible for debugging (some environments require this)
                 link.style.position = 'fixed';
                 link.style.top = '-9999px';
                 link.style.left = '-9999px';
                 
-                // Append to body (required for Firefox and some mobile browsers)
                 document.body.appendChild(link);
                 console.log('Link appended to body');
                 
-                // Trigger click
                 link.click();
                 console.log('Click triggered on download link');
+                downloadAttempted = true;
                 
-                // Cleanup after a delay
                 setTimeout(() => {
                     document.body.removeChild(link);
                     URL.revokeObjectURL(url);
                     console.log('Cleanup completed');
                 }, 500);
                 
-                showNotification('تم بدء التنزيل - تحقق من مجلد التنزيلات', 'success');
-                console.log('Method 1: Download initiated successfully');
+                showNotification('جاري التنزيل... تحقق من مجلد التنزيلات أو إشعارات المتصفح', 'success');
+                console.log('Method 1: Download initiated');
+                
+                // Show helpful message after a delay
+                setTimeout(() => {
+                    if (downloadAttempted) {
+                        console.log('=== إذا لم يبدأ التنزيل ===');
+                        console.log('1. تحقق من إذن التنزيلات في إعدادات التطبيق');
+                        console.log('2. جرب فتح الملف في نافذة جديدة من خيارات العرض');
+                        console.log('3. جرب نسخ رابط البيانات ولصقه في متصفح خارجي');
+                    }
+                }, 2000);
+                
                 return;
                 
             } catch (error) {
